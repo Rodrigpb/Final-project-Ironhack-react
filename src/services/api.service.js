@@ -1,14 +1,25 @@
-import axios from "axios";
+import axios from 'axios'
 
-axios.defaults.baseURL = "http://localhost:3010";
-axios.defaults.withCredentials = true; // Very important so that cookies will be set and sent with every request
+const http = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3010",
+  withCredentials: true
+})
 
-export const login = (email, password) => {
-  return axios.post("/login", { email, password }).then((res) => res.data);
-};
+http.interceptors.response.use(function(response) {
+  return response.data;
+}, function (error) {
+  if (error.response?.status === 401) {
+    localStorage.clear()
+    window.location.assign('/login')
+  }
+  return Promise.reject(error);
+});
 
-export const getProducts = () => {
-  return axios.get("/product").then((res) => res.data);
-};
+export const login = ({ email, password }) => http.post('/login', { email, password })
+export const logout = () => http.post('/logout')
+export const getToken = (token) => http.get(`/activate/${token}`)
+export const getUser = (id) => http.get(`/user/${id}`)
+export const createUser = (user) => http.post('/users', { user })
 
-// Add whatever API calls you need here
+export const spaces = () => http.get('/spaces')
+export const searchSpace = (search) => http.get(`/spaces/${search}`)
