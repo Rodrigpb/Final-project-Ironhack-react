@@ -1,19 +1,14 @@
-import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import React from 'react';
+import { Redirect, Route } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/AuthContext';
 
-export function AuthenticatedRoute({ user, path }) {
-  return (
-    <div>
-      {user ? <Route path={path} /> : <Redirect to="/login" />}
-    </div>
-  ) 
+
+const RedirectToLogin = () => <Redirect to='/login' />
+const UserExist = () => {
+  const { user } = useAuthContext()
+  return user
 }
 
-export function NotAuthenticatedRoute({ user, path }) {
-  return (
-    <div>
-      {user ? <Redirect to="/login" /> : <Route path={path} />}
-    </div>
-  ) 
+export function AuthenticatedRoute(props) {
+	return <Route {...props} component={UserExist() !== null ? props.component : RedirectToLogin} />;
 }
-
