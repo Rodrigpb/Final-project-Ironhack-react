@@ -1,3 +1,41 @@
-.Header{
-	
+.Header {
+    box-shadow: 0 2px 10px -2px #132651;
+}
+
+.header-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-container > .logo {
+    width: 10em;
+}
+.header-container > .search {
+    width: 33em;
+}
+
+.header-container > .search input {
+    padding: 0 1em .1em .2em;
+    border: 0;
+    border-bottom: 1px solid #132651;
+    color: #132651;
+    width: 60%;
+    font-style: italic;
+}
+
+.header-container .search-logo {
+    font-size: 20px;
+}
+
+.color-logo {
+    color: #132651;
+}
+
+.header-container > .nav {
+    font-weight: 500;
+}
+.header-container > .nav > a:hover{
+    text-decoration: none;
+    color: #0b1732;
 }
