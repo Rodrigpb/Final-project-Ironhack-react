@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import Home from './components/screens/home';
+import Home from './components/home/home';
 import Profile from './components/screens/profile';
 import Login from './components/screens/login';
 import NewSpace from './components/screens/newSpace';
