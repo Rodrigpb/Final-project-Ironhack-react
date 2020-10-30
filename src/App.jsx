@@ -21,7 +21,7 @@ function App() {
 				<Route exact path="/" component={Home} />
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={NewUser} />
-				<Route exact path="/search" component={SearchSpace} />
+				<Route exact path="/search/:search" component={SearchSpace} />
 				<Redirect to="/" />
 			</Switch>
 		</div>

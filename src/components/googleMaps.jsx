@@ -20,7 +20,7 @@ function MyMap(props) {
 	}, []);
 
 	return (
-        <div>
+		<div>
 			<LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API}>
 				<GoogleMap
 					mapContainerStyle={containerStyle}
@@ -29,16 +29,16 @@ function MyMap(props) {
 					//onLoad={onLoad}
 					onUnmount={onUnmount}
 				>
-                 <Marker
-                    position={props.center}
-                />
+					{props.marker ? props.marker.map((marker) => {
+                        return <Marker
+                            key={marker.id}
+                            // onClick={onClick}
+                            position={marker} />
+                    }) : <Marker position={props.center} />}
 					{/* Child components, such as markers, info windows, etc. */}
 				</GoogleMap>
-               
 			</LoadScript>
-           
-                </div>
-		
+		</div>
 	);
 }
 
