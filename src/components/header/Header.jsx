@@ -4,6 +4,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import './Header.css';
 import { SearchOutlined } from '@ant-design/icons';
+import Avatar from 'antd/lib/avatar/avatar';
 
 const Header = (props) => {
 	const { user } = useAuthContext();
@@ -21,7 +22,7 @@ const Header = (props) => {
 	};
 
 	return (
-		<header className='Header'>
+		<header className="Header">
 			<div className="container header-container">
 				<img src="/images/logo.png" alt="logo" className="logo" />
 				<form className="search" onSubmit={onSubmit}>
@@ -31,11 +32,14 @@ const Header = (props) => {
 					</button>
 				</form>
 				<div className="nav">
-					<Link to="/new" className="mr-4 color-logo">
+					<Link to="/new-space" className="mr-4 color-logo">
 						AÑADE TU ESPACIO
 					</Link>
 					{user ? (
-						user.name
+						<div>
+							<Avatar src={user.avatar} />
+							user.name
+						</div>
 					) : (
 						<Link className="color-logo" to="/login">
 							ENTRAR
