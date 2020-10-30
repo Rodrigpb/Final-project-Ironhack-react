@@ -1,19 +1,18 @@
-import { Button, Checkbox, FormControlLabel, Modal, TextField } from '@material-ui/core';
-import { MehOutlined, SmileTwoTone, UploadOutlined } from '@ant-design/icons';
-import { InputNumber, Upload } from 'antd';
+import {Checkbox, FormControlLabel, TextField } from '@material-ui/core';
+import { MehOutlined, SmileTwoTone } from '@ant-design/icons';
 import React, { useState } from 'react';
 import '../stylesheet/newSpace.css';
 import InputNumberWithLabel from '../inputNumberwithLabel';
-import Map from '../searchAutocomplete';
+import MapBar from '../searchAutocomplete';
+import MyMap from '../googleMaps';
+import Button from '../Button/Button'
 
 const validations = {
 	name: (value) => value.length > 1,
 	files: (value) => value.length > 1,
 	description: (value) => value.length > 25,
 	service: (value) => value.length > 1,
-	nº_de_oficinas: (value) => value.length > 1,
-	attenuation_level: (value) => value.length > 1,
-	contributed_by: (value) => value.length > 1
+	nº_de_oficinas: (value) => value.length > 1
 };
 
 const services = [
@@ -57,17 +56,16 @@ const NewSpace = () => {
 			files: [],
 			description: '',
 			service: [],
-			brewers_tips: '',
-			attenuation_level: '',
-			contributed_by: ''
+			direction: '',
+			extraDirection: '',
+			city: '',
+			coordinates: { lat: 40.416775, lng: -3.70379 }
 		},
 		error: {
 			name: true,
 			files: true,
 			description: true,
-			first_brewed: true,
-			brewers_tips: true,
-			attenuation_level: true,
+			direction: true,
 			contributed_by: true
 		},
 		touch: {}
@@ -75,11 +73,12 @@ const NewSpace = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		console.log(state)
 	};
 
 	const handleChange = (e) => {
 		const { name, value, files } = e.target;
-		const isValid = validations[name](value);
+		//const isValid = validations[name](value);
 
 		setState({
 			data: {
@@ -92,18 +91,42 @@ const NewSpace = () => {
 						: files ? files : value
 			},
 			error: {
-				...state.error,
-				[name]: !isValid
+				...state.error
+				//[name]: !isValid
 			},
 			touch: {
 				...state.touch
+			}
+		});
+		console.log(state);
+	};
+
+	const handlePlace = (place) => {
+		const address = place.formatted_address;
+		const city = place.address_components[2].long_name;
+		const latValue = place.geometry.location.lat();
+		const lngValue = place.geometry.location.lng();
+
+		setState({
+			data: {
+				...state.data,
+				direction: address,
+				city: city,
+				coordinates: { lat: latValue, lng: lngValue }
+			},
+			error: {
+				...state.error,
+				direction: true
+			},
+			touch: {
+				...state.touch,
+				direction: true
 			}
 		});
 	};
 
 	const handleBlur = (e) => {
 		const { name } = e.target;
-		console.log(state);
 		setState({
 			...state,
 			touch: {
@@ -116,12 +139,12 @@ const NewSpace = () => {
 
 	return (
 		<div className="NewSpace">
-			<h2 className="text-center">Crear Espacio de Coworking</h2>
+			<h2 className="text-center font-italic">Crear Espacio de Coworking</h2>
 			<form onSubmit={handleSubmit}>
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Información General</h5>
 					<div className="row mt-5 ml-5">
-						<div className="col-6 d-flex flex-column justify-content-between ">
+						<div className="col-md-6 d-flex flex-column justify-content-between ">
 							<TextField
 								id="standard-basic"
 								label="Nombre del Espacio *"
@@ -138,7 +161,7 @@ const NewSpace = () => {
 								<input type="file" onChange={handleChange} name="files" multiple />
 							</div>
 						</div>
-						<div className="col-5 d-flex flex-column">
+						<div className="col-md-5 d-flex flex-column">
 							<TextField
 								id="standard-multiline-static"
 								name="description"
@@ -160,7 +183,7 @@ const NewSpace = () => {
 					<div className="row mt-5 ml-5">
 						{services.map((service, index) => {
 							return (
-								<div className="col-6" key={index}>
+								<div className="col-md-6" key={index}>
 									<FormControlLabel
 										control={
 											<Checkbox
@@ -181,16 +204,25 @@ const NewSpace = () => {
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Dirección</h5>
 					<div className="row mt-5 ml-5">
-						<div className="col-6">
-						
-							<Map />
-							<label>Piso, puerta, escalera, etc</label><br/>
-							<input style={{
-						width: '100%',
-						height: '40px',
-						paddingLeft: '16px',
-						marginTop: '2px'
-					}} type='text' name='direction' />
+						<div className="col-md-6">
+							<MapBar onPlaceSelected={handlePlace} />
+							<label>Piso, puerta, escalera, etc</label>
+							<br />
+							<input
+								style={{
+									width: '100%',
+									height: '40px',
+									paddingLeft: '16px',
+									marginTop: '2px'
+								}}
+								type="text"
+								name="extraDirection"
+								value={data.extraDirection}
+								onChange={handleChange}
+							/>
+						</div>
+						<div className="col-md-6">
+							<MyMap center={data.coordinates} />
 						</div>
 					</div>
 				</div>
@@ -206,7 +238,7 @@ const NewSpace = () => {
 								name="mesas"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="cantidad"
@@ -215,7 +247,7 @@ const NewSpace = () => {
 								name="mesasQuantity"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="precio"
@@ -226,7 +258,7 @@ const NewSpace = () => {
 						</div>
 					</div>
 					<div className="row mt-5 ml-5">
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="nº de oficinas"
@@ -235,7 +267,7 @@ const NewSpace = () => {
 								name="office"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="cantidad"
@@ -244,7 +276,7 @@ const NewSpace = () => {
 								name="officeQuantity"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="precio"
@@ -255,7 +287,7 @@ const NewSpace = () => {
 						</div>
 					</div>
 					<div className="row mt-5 ml-5">
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="nº de sala de reuniones"
@@ -264,7 +296,7 @@ const NewSpace = () => {
 								name="meet"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="cantidad"
@@ -273,7 +305,7 @@ const NewSpace = () => {
 								name="meetQuantity"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="precio"
@@ -284,7 +316,7 @@ const NewSpace = () => {
 						</div>
 					</div>
 					<div className="row mt-5 ml-5">
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="Otros"
@@ -293,7 +325,7 @@ const NewSpace = () => {
 								name="other"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="cantidad"
@@ -302,7 +334,7 @@ const NewSpace = () => {
 								name="otherQuantity"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-md-4">
 							<InputNumberWithLabel
 								type="number"
 								label="precio"
@@ -313,6 +345,12 @@ const NewSpace = () => {
 						</div>
 					</div>
 				</div>
+				<div className="container container-article">
+					<h5 className="ml-4 mt-3 font-weight-bold">Horario</h5>
+					<div className="row mt-5 ml-5" />
+				</div>
+				<Button type='submit' name='Crear Espacio'/>
+				
 			</form>
 		</div>
 	);

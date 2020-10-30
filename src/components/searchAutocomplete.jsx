@@ -1,35 +1,8 @@
 import Autocomplete from 'react-google-autocomplete';
 import React from 'react';
 
-class Map extends React.Component {
-	/**
-  * When the user types an address in the search box
-  * @param place
-  */
-	onPlaceSelected = (place) => {
-		const address = place.formatted_address,
-			addressArray = place.address_components,
-			city = this.getCity(addressArray),
-			area = this.getArea(addressArray),
-			state = this.getState(addressArray),
-			latValue = place.geometry.location.lat(),
-			lngValue = place.geometry.location.lng();
-		// Set these values in the state.
-		this.setState({
-			address: address ? address : '',
-			area: area ? area : '',
-			city: city ? city : '',
-			state: state ? state : '',
-			markerPosition: {
-				lat: latValue,
-				lng: lngValue
-			},
-			mapPosition: {
-				lat: latValue,
-				lng: lngValue
-			}
-		});
-	};
+class MapBar extends React.Component {
+
 
 	render() {
 		return (
@@ -45,10 +18,7 @@ class Map extends React.Component {
 						marginBottom: '15px'
 					}}
 					placeholder="Introduce la dirección"
-					// onPlaceSelected={this.onPlaceSelected}
-					onPlaceSelected={(place) => {
-						console.log(place);
-					}}
+					onPlaceSelected={this.props.onPlaceSelected}
 					types={[ 'address' ]}
 					componentRestrictions={{ country: 'es' }}
 				/>
@@ -57,4 +27,4 @@ class Map extends React.Component {
 	}
 }
 
-export default Map;
+export default MapBar;
