@@ -17,7 +17,8 @@ function App() {
 			<Switch>
 
         <AuthenticatedRoute exact path='/profile' component={Profile}/>
-				<AuthenticatedRoute exact path="/new-space" component={NewSpace}/>
+				{/* <AuthenticatedRoute exact path="/new-space" component={NewSpace} /> */}
+        <Route exact path="/new-space" component={NewSpace} />
 				<Route exact path="/" component={Home}/>
         <Route exact path="/login" component={Login}/>
         <Route exact path="/register" component={SignUp}/>
