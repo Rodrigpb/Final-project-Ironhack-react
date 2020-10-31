@@ -1,18 +1,20 @@
-import {Checkbox, FormControlLabel, TextField } from '@material-ui/core';
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import { MehOutlined, SmileTwoTone } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import '../stylesheet/newSpace.css';
 import InputNumberWithLabel from '../inputNumberwithLabel';
 import MapBar from '../searchAutocomplete';
 import MyMap from '../googleMaps';
-import Button from '../Button/Button'
+import Button from '../Button/Button';
 
 const validations = {
 	name: (value) => value.length > 1,
 	files: (value) => value.length > 1,
 	description: (value) => value.length > 25,
 	service: (value) => value.length > 1,
-	nº_de_oficinas: (value) => value.length > 1
+	schedule: (value) => value.length > 1,
+	direction:(value) => value.length > 1,
+	
 };
 
 const services = [
@@ -59,21 +61,29 @@ const NewSpace = () => {
 			direction: '',
 			extraDirection: '',
 			city: '',
-			coordinates: { lat: 40.416775, lng: -3.70379 }
+			coordinates: { lat: 40.416775, lng: -3.70379 },
+			type: '',
+			quantity: 0,
+			price: 0,
+			schedule: [],
+			scheduletype: '',
+			timeEntry: '08:30',
+			timeExit: '18:30'
 		},
 		error: {
 			name: true,
 			files: true,
 			description: true,
 			direction: true,
-			contributed_by: true
+			type: true
 		},
 		touch: {}
 	});
+	const [ map, setMap ] = React.useState(null);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(state)
+		console.log(state);
 	};
 
 	const handleChange = (e) => {
@@ -84,10 +94,10 @@ const NewSpace = () => {
 			data: {
 				...state.data,
 				[name]:
-					name === 'service'
+					name === 'service' || name === 'schedule'
 						? e.target.checked
-							? [ ...state.data.service.filter((service) => service !== value), value ]
-							: [ ...state.data.service.filter((service) => service !== value) ]
+							? [ ...state.data[name].filter((service) => service !== value), value ]
+							: [ ...state.data[name].filter((service) => service !== value) ]
 						: files ? files : value
 			},
 			error: {
@@ -101,7 +111,18 @@ const NewSpace = () => {
 		console.log(state);
 	};
 
-	const handlePlace = (place) => {
+	const onLoad = useCallback(function callback(map) {
+		// const bounds = new window.google.maps.LatLngBounds();
+		// map.fitBounds(bounds);
+		setMap(map);
+	}, []);
+
+	const onUnmount = useCallback(function callback(map) {
+		setMap(null);
+	}, []);
+
+	const handlePlace = () => {
+		const place = map.getPlace();
 		const address = place.formatted_address;
 		const city = place.address_components[2].long_name;
 		const latValue = place.geometry.location.lat();
@@ -204,153 +225,173 @@ const NewSpace = () => {
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Dirección</h5>
 					<div className="row mt-5 ml-5">
-						<div className="col-md-6">
-							<MapBar onPlaceSelected={handlePlace} />
-							<label>Piso, puerta, escalera, etc</label>
-							<br />
-							<input
-								style={{
-									width: '100%',
-									height: '40px',
-									paddingLeft: '16px',
-									marginTop: '2px'
-								}}
-								type="text"
-								name="extraDirection"
-								value={data.extraDirection}
-								onChange={handleChange}
-							/>
-						</div>
-						<div className="col-md-6">
-							<MyMap center={data.coordinates} />
-						</div>
+						<MyMap
+							center={data.coordinates}
+							onPlaceSelected={handlePlace}
+							onChange={handleChange}
+							valueInput={data.extraDirection}
+							onLoad={onLoad}
+							onUnmount={onUnmount}
+						/>
 					</div>
 				</div>
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Caracteristicas</h5>
 					<div className="row mt-5 ml-5">
-						<div className="col-4">
-							<InputNumberWithLabel
-								type="number"
-								label="nº de mesas"
-								value={data.mesas || 0}
-								onChange={handleChange}
-								name="mesas"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="cantidad"
-								value={data.mesasQuantity || 0}
-								onChange={handleChange}
-								name="mesasQuantity"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="precio"
-								value={data.mesasPrice || 0}
-								onChange={handleChange}
-								name="mesasPrice"
-							/>
-						</div>
+						<h6>Horario</h6>
 					</div>
-					<div className="row mt-5 ml-5">
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="nº de oficinas"
-								value={data.office || 0}
-								onChange={handleChange}
-								name="office"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="cantidad"
-								value={data.officeQuantity || 0}
-								onChange={handleChange}
-								name="officeQuantity"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="precio"
-								value={data.officePrice || 0}
-								onChange={handleChange}
-								name="officePrice"
-							/>
-						</div>
+					<div className="row mt-1 ml-5">
+						<FormControlLabel
+							value="Lunes"
+							control={<Checkbox color="primary" />}
+							label="Lu"
+							labelPlacement="top"
+							className="schedule"
+							onChange={handleChange}
+							name="schedule"
+						/>
+						<FormControlLabel
+							value="Martes"
+							control={<Checkbox color="primary" />}
+							label="Ma"
+							labelPlacement="top"
+							className="schedule"
+							onChange={handleChange}
+							name="schedule"
+						/>
+						<FormControlLabel
+							value="Miercoles"
+							control={<Checkbox color="primary" />}
+							label="Mi"
+							labelPlacement="top"
+							className="schedule"
+							onChange={handleChange}
+							name="schedule"
+						/>
+						<FormControlLabel
+							value="Jueves"
+							control={<Checkbox color="primary" />}
+							label="Ju"
+							labelPlacement="top"
+							className="schedule"
+							onChange={handleChange}
+							name="schedule"
+						/>
+						<FormControlLabel
+							value="Viernes"
+							control={<Checkbox color="primary" />}
+							label="Vi"
+							labelPlacement="top"
+							className="schedule"
+							onChange={handleChange}
+							name="schedule"
+						/>
+						<FormControlLabel
+							value="Sabado"
+							control={<Checkbox color="primary" />}
+							label="Sa"
+							labelPlacement="top"
+							className="schedule"
+							onChange={handleChange}
+							name="schedule"
+						/>
+						<FormControlLabel
+							value="Domingo"
+							control={<Checkbox color="primary" />}
+							onChange={handleChange}
+							name="schedule"
+							label="Do"
+							labelPlacement="top"
+							className="schedule"
+						/>
 					</div>
+					{data.schedule.length > 0 ? (
+						<div className="row mt-2 ml-5">
+							<FormControl className="form-select">
+								<InputLabel id="demo-simple-select-label">Turno de apertura</InputLabel>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									value={data.available}
+									name="scheduletype"
+									onChange={handleChange}
+								>
+									<MenuItem value={'Mañana'}>Horario de mañana</MenuItem>
+									<MenuItem value={'Tarde'}>Horario de tarde</MenuItem>
+									<MenuItem value={'Todo el día'}>Todo el día</MenuItem>
+								</Select>
+							</FormControl>
+							<FormControl className="form-select">
+								<TextField
+									id="time"
+									label="Entrada"
+									type="time"
+									value={data.timeEntry}
+									onChange={handleChange}
+									name="timeEntry"
+								/>
+							</FormControl>
+							<FormControl className="form-select">
+								<TextField
+									id="time"
+									label="Salida"
+									type="time"
+									onChange={handleChange}
+									name="timeExit"
+									value={data.timeExit}
+								/>
+							</FormControl>
+						</div>
+					) : (
+						''
+					)}
 					<div className="row mt-5 ml-5">
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="nº de sala de reuniones"
-								value={data.meet || 0}
-								onChange={handleChange}
-								name="meet"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="cantidad"
-								value={data.meetQuantity || 0}
-								onChange={handleChange}
-								name="meetQuantity"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="precio"
-								value={data.meetPrice || 0}
-								onChange={handleChange}
-								name="meetPrice"
-							/>
-						</div>
+						<h6>Espacio</h6>
 					</div>
-					<div className="row mt-5 ml-5">
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="Otros"
-								value={data.meet || 0}
+
+					<div className="row mt-1 ml-5">
+						<FormControl className="form-select">
+							<InputLabel id="demo-simple-select-label">Tipo de espacio</InputLabel>
+							<Select
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={data.type}
+								name="type"
 								onChange={handleChange}
-								name="other"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="cantidad"
-								value={data.otherQuantity || 0}
-								onChange={handleChange}
-								name="otherQuantity"
-							/>
-						</div>
-						<div className="col-md-4">
-							<InputNumberWithLabel
-								type="number"
-								label="precio"
-								value={data.otherPrice || 0}
-								onChange={handleChange}
-								name="otherPrice"
-							/>
-						</div>
+							>
+								<MenuItem value={'office'}>Oficina completa</MenuItem>
+								<MenuItem value={'desk'}>Escritorio</MenuItem>
+								<MenuItem value={'meetingRoom'}>Sala de reuniones</MenuItem>
+							</Select>
+						</FormControl>
+						{data.type !== '' ? (
+							<div>
+								<TextField
+									className="form-select"
+									id="standard-basic"
+									label="Capacidad de personas"
+									type="number"
+									name="quantity"
+									onChange={handleChange}
+									value={data.quantity}
+								/>
+
+								<TextField
+									className="form-select"
+									id="standard-basic"
+									label={data.type === 'desk' ? "Precio por persona/día" : 'Precio por día'}
+									type="number"
+									name="price"
+									onChange={handleChange}
+									value={data.price}
+								/>
+							</div>
+						) : (
+							''
+						)}
 					</div>
 				</div>
-				<div className="container container-article">
-					<h5 className="ml-4 mt-3 font-weight-bold">Horario</h5>
-					<div className="row mt-5 ml-5" />
-				</div>
-				<Button type='submit' name='Crear Espacio'/>
-				
+				<Button type="submit" name="Crear Espacio" />
 			</form>
 		</div>
 	);
