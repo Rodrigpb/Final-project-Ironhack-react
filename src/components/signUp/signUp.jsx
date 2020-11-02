@@ -1,10 +1,6 @@
-  
 import React from 'react';
 import FormUserDetails from './formUserDetails'
 import FormBusinessDetails from './formBusinessDetails'
-import LogIn from '../screens/login';
-import { Redirect } from 'react-router-dom';
-
 
 export default class SignUp extends React.Component {
  

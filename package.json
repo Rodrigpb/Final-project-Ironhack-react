@@ -1,5 +1,5 @@
 {
-  "name": "youWork",
+  "name": "you-work",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,6 +21,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "react-swipeable-views": "^0.13.9",
+    "react-youtube": "^7.13.0",
     "typescript": "^2.9.2"
   },
   "scripts": {

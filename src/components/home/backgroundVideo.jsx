@@ -1,17 +1,19 @@
 import React from 'react';
+import './backgroundVideo.css'
 
-const BackgroundVideo = () => {
-    
-    return (
-            <iframe width="1189" height="669" 
-            src="https://www.youtube.com/embed/hywVgqbSQ-8" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-            </iframe>
-        
-    )
+
+export default function BackgroundVideo() {
+  return (
+      <div className="video-background">
+        <div className="video-foreground">
+          <iframe
+          src="https://www.youtube.com/embed/hywVgqbSQ-8?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&mute=1&autohide=0" 
+          frameborder="0" 
+          allowfullscreen
+          >
+          </iframe>
+        </div>
+      </div>
+  )
 }
-
-export default BackgroundVideo
 
