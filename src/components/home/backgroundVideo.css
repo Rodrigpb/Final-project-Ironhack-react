@@ -1,26 +1,26 @@
 * { box-sizing: border-box; }
 .video-background {
-  background: #000;
+  background: none;
   position: static;
  
 }
 .video-foreground,
 .video-background iframe {
-  position: absolute;
+  /* position: absolute; */
   background-size: cover;
   
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 80px);
   pointer-events: none;
 }
 
 
-@media (min-aspect-ratio: 16/9) {
+/* @media (min-aspect-ratio: 16/9) {
   .video-foreground { height: 100%; top: -100%; }
 }
 @media (max-aspect-ratio: 16/9) {
   .video-foreground { width: 100%; left: -100%; }
-}
+} */
 /* @media all and (max-width: 600px) {
 .vid-info { width: 50%; padding: .5rem; }
 .vid-info h1 { margin-bottom: .2rem; }

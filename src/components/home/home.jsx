@@ -19,8 +19,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        You Work
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -54,11 +54,6 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1,
   },
-  // video: {
-  //   height: '100%',
-  //   width: '100%',
-  //   display: 'flex',
-  // },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
@@ -138,17 +133,17 @@ export default function Home() {
         </Container>
       </main>
       
-        <Container >
+        
             <BackgroundVideo />
-        </Container>
+      
 
       {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          You Work!
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Something here to give the footer a purpose!
+          ¡Paga y calla!
         </Typography>
         <Copyright />
       </footer>

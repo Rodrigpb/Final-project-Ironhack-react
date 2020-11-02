@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 //import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import Grid from '@material-ui/core/Grid';
 // import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuthContext } from '../../contexts/AuthContext';
+import {Login} from '../../services/api.service';
 
 
 function Copyright() {
@@ -56,12 +58,84 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
+    backgroundColor: '#132651' ,
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
+const validations = {
+  password: (value) => value.length > 1,
+  email: (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+}
+
+
+//Función de Login
 export default function LogIn() {
   const classes = useStyles();
+   const {login} = useAuthContext()
+  console.log(login)
+
+  const [ state, setState ] = useState({
+    data: {
+      email: '',
+      password: ''
+    },
+    error: {
+      email: true,
+      password: true
+    },
+    touch: {}
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Hola")
+
+    const User = async () => {
+      try {
+        const user = await Login(state.data)
+        login(user)
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    User();
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const isValid = validations.hasOwnProperty(name) ? validations[name](value) : '';
+    
+    setState({
+			data: {...state.data, [name]: value
+			},
+			error: {
+				...state.error,
+				[name]: isValid !== '' && !isValid
+			},
+			touch: {
+				...state.touch
+			}
+		});
+  };
+
+  const handleBlur = (e) => {
+		const { name } = e.target;
+		setState({
+			...state,
+			touch: {
+				...state.touch,
+				[name]: true
+			}
+		});
+	};
+
+
+  const { data, error, touch } = state;
+  const isError = Object.values(error).some((el) => el);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -76,7 +150,7 @@ export default function LogIn() {
           <Typography component="h1" variant="h5">
             Inicia sesión
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -87,6 +161,10 @@ export default function LogIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              // onBlur={handleBlur}
+							value={data.email}
+              onChange={handleChange}
+              //error={error.email && touch.email ? true : false}
             />
             <TextField
               variant="outlined"
@@ -98,6 +176,10 @@ export default function LogIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              // onBlur={handleBlur}
+							value={data.password}
+              onChange={handleChange}
+              //error={error.password && touch.password ? true : false}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="#132651" />}
@@ -108,7 +190,8 @@ export default function LogIn() {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              // disable={isError}
+              
             >
               Iniciar sesión
             </Button>
