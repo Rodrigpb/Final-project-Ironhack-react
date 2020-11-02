@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Carousel from './carousel';
 import BackgroundVideo from './backgroundVideo';
+import Box from '@material-ui/core/Box';
 
 
 function Copyright() {
@@ -46,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1,
   },
+  // video: {
+  //   height: '100%',
+  //   width: '100%',
+  //   display: 'flex',
+  // },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
@@ -129,9 +134,11 @@ export default function Home() {
                 </Card>
               </Grid>
             ))}
-            <BackgroundVideo/>
           </Grid>
         </Container>
+        <Box >
+            <BackgroundVideo />
+        </Box>
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
