@@ -3,18 +3,22 @@ import { MehOutlined, SmileTwoTone } from '@ant-design/icons';
 import React, { useCallback, useState } from 'react';
 import '../stylesheet/newSpace.css';
 import InputNumberWithLabel from '../inputNumberwithLabel';
-import MapBar from '../searchAutocomplete';
 import MyMap from '../googleMaps';
 import Button from '../Button/Button';
+import { newSpace } from '../../services/api.service';
+import { useHistory } from 'react-router-dom';
 
 const validations = {
-	name: (value) => value.length > 1,
+	title: (value) => value.length > 1,
 	files: (value) => value.length > 1,
 	description: (value) => value.length > 25,
 	service: (value) => value.length > 1,
 	schedule: (value) => value.length > 1,
-	direction:(value) => value.length > 1,
-	
+	direction: (value) => value.length > 1,
+	price: (value) => value > 1,
+	quantity: (value) => value > 1,
+	type: (value) => value.length > 1,
+	scheduletype: (value) => value.length > 2
 };
 
 const services = [
@@ -38,7 +42,7 @@ const services = [
 	'Recepción de llamadas',
 	'Recepción paquetería',
 	'Secretaría',
-	'Proyector',
+	'Impresora',
 	'Uso de Dirección',
 	'Niños permitidos',
 	'Coworking Visa',
@@ -51,10 +55,10 @@ const services = [
 	'Escáner'
 ];
 
-const NewSpace = () => {
+const NewSpace = (props) => {
 	const [ state, setState ] = useState({
 		data: {
-			name: '',
+			title: '',
 			files: [],
 			description: '',
 			service: [],
@@ -71,24 +75,39 @@ const NewSpace = () => {
 			timeExit: '18:30'
 		},
 		error: {
-			name: true,
+			title: true,
 			files: true,
 			description: true,
+			service: true,
+			schedule: true,
 			direction: true,
-			type: true
+			price: true,
+			quantity: true,
+			type: true,
+			scheduletype: true
 		},
 		touch: {}
 	});
-	const [ map, setMap ] = React.useState(null);
+	const [ map, setMap ] = useState(null);
+	const history = useHistory();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(state);
+
+		const Space = async () => {
+			try {
+				const space = await newSpace(state.data);
+				history.push(`/space/${space.id}`);
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		Space();
 	};
 
 	const handleChange = (e) => {
 		const { name, value, files } = e.target;
-		//const isValid = validations[name](value);
+		const isValid = validations.hasOwnProperty(name) ? validations[name](value) : '';
 
 		setState({
 			data: {
@@ -101,14 +120,13 @@ const NewSpace = () => {
 						: files ? files : value
 			},
 			error: {
-				...state.error
-				//[name]: !isValid
+				...state.error,
+				[name]: isValid !== '' && !isValid
 			},
 			touch: {
 				...state.touch
 			}
 		});
-		console.log(state);
 	};
 
 	const onLoad = useCallback(function callback(map) {
@@ -137,7 +155,7 @@ const NewSpace = () => {
 			},
 			error: {
 				...state.error,
-				direction: true
+				direction: false
 			},
 			touch: {
 				...state.touch,
@@ -157,10 +175,11 @@ const NewSpace = () => {
 		});
 	};
 	const { data, error, touch } = state;
+	const isError = Object.values(error).some((el) => el);
 
 	return (
 		<div className="NewSpace">
-			<h2 className="text-center font-italic">Crear Espacio de Coworking</h2>
+			<h2 className="text-center font-italic mt-5">Crear Espacio de Coworking</h2>
 			<form onSubmit={handleSubmit}>
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Información General</h5>
@@ -169,13 +188,13 @@ const NewSpace = () => {
 							<TextField
 								id="standard-basic"
 								label="Nombre del Espacio *"
-								name="name"
+								name="title"
 								onBlur={handleBlur}
-								value={data.name}
+								value={data.title}
 								onChange={handleChange}
-								helperText={`Quedan ${28 - data.name.length} caracteres`}
+								helperText={`Quedan ${28 - data.title.length} caracteres`}
 								inputProps={{ maxLength: 28 }}
-								error={error.name && touch.name ? true : false}
+								error={error.title && touch.title ? true : false}
 							/>
 							<div className="mb-3">
 								<h6>Sube las imágenes de tu espacio</h6>
@@ -190,6 +209,7 @@ const NewSpace = () => {
 								multiline
 								rows={8}
 								cols={20}
+								onBlur={handleBlur}
 								value={data.description}
 								onChange={handleChange}
 								helperText={`Quedan ${1500 - data.description.length} caracteres`}
@@ -312,9 +332,10 @@ const NewSpace = () => {
 								<Select
 									labelId="demo-simple-select-label"
 									id="demo-simple-select"
-									value={data.available}
+									value={data.scheduletype}
 									name="scheduletype"
 									onChange={handleChange}
+									onBlur={handleBlur}
 								>
 									<MenuItem value={'Mañana'}>Horario de mañana</MenuItem>
 									<MenuItem value={'Tarde'}>Horario de tarde</MenuItem>
@@ -358,6 +379,8 @@ const NewSpace = () => {
 								value={data.type}
 								name="type"
 								onChange={handleChange}
+								onBlur={handleBlur}
+								error={error.type && touch.type ? true : false}
 							>
 								<MenuItem value={'office'}>Oficina completa</MenuItem>
 								<MenuItem value={'desk'}>Escritorio</MenuItem>
@@ -373,17 +396,21 @@ const NewSpace = () => {
 									type="number"
 									name="quantity"
 									onChange={handleChange}
+									onBlur={handleBlur}
 									value={data.quantity}
+									error={error.quantity && touch.quantity ? true : false}
 								/>
 
 								<TextField
 									className="form-select"
 									id="standard-basic"
-									label={data.type === 'desk' ? "Precio por persona/día" : 'Precio por día'}
+									label={data.type === 'desk' ? 'Precio por persona/día' : 'Precio por día'}
 									type="number"
 									name="price"
+									onBlur={handleBlur}
 									onChange={handleChange}
 									value={data.price}
+									error={error.price && touch.price ? true : false}
 								/>
 							</div>
 						) : (
@@ -391,7 +418,12 @@ const NewSpace = () => {
 						)}
 					</div>
 				</div>
-				<Button type="submit" name="Crear Espacio" />
+				<Button
+					disable={isError}
+					type="submit"
+					name="Crear Espacio"
+					className={isError ? 'button disable' : 'button'}
+				/>
 			</form>
 		</div>
 	);

@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Icon from '@material-ui/core/Icon'
+import 'antd/dist/antd.css';
 
 ReactDOM.render(
 	<React.StrictMode>

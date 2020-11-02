@@ -9,3 +9,8 @@
     font-weight: 600;
     
 }
+
+.disable {
+    opacity: .5;
+    cursor: pointer;
+}
