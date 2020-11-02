@@ -18,7 +18,6 @@ const Header = (props) => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		console.log(history);
 		
 		history.push(`/search/${search}`)
 	};

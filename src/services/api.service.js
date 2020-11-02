@@ -21,5 +21,41 @@ export const getToken = (token) => http.get(`/activate/${token}`)
 export const getUser = (id) => http.get(`/user/${id}`)
 export const createUser = (user) => http.post('/users', { user })
 
+export const newComment = (id, text) => http.post(`/space/${id}/comments`, { text })
+export const deleteComment = (id) => http.delete(`/space/${id}/comments`)
+
+export const newReview = (id, review) => http.post(`/space/${id}/review`, {review})
+
+
 export const spaces = () => http.get('/spaces')
 export const searchSpace = (search) => http.get(`/spaces/${search}`)
+export const getSpace = (id) => http.get(`/space/${id}`)
+export const newSpace = (data) => {
+  const formData = new FormData()
+
+  formData.append('title', data.title)
+  for (let i = 0; i < data.files.length; i++) {
+    formData.append('image[]', data.files[i])
+  }
+  data.service.map(service =>  formData.append('services', service))
+  data.schedule.map(day =>  formData.append('day', day))
+  formData.append('description', data.description)
+  formData.append('direction', data.direction)
+  formData.append('extraDirection', data.extraDirection)
+  formData.append('city', data.city)
+  formData.append('coordinates', data.coordinates.lat)
+  formData.append('coordinates', data.coordinates.lng)
+  formData.append('type', data.type)
+  formData.append('quantity', data.quantity)
+  formData.append('price', data.price)
+  formData.append('available', data.scheduletype)
+  formData.append('checkIn', data.timeEntry)
+  formData.append('checkOut', data.timeExit)
+
+
+  return http.post('/space/new', formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }})
+  
+}
