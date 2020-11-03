@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from '../../contexts/AuthContext';
 import {login as minilogin} from '../../services/api.service';
+import { Alert } from 'antd';
 
 
 function Copyright() {
@@ -76,6 +77,7 @@ const validations = {
 export default function LogIn() {
   const classes = useStyles();
   const {login} = useAuthContext()
+  const [serror, setError] = useState(null)
   
 
    const [ state, setState ] = useState({
@@ -101,7 +103,7 @@ export default function LogIn() {
           console.log(user)
           login(user)
         } catch (e) {
-          console.log(e);
+          setError('Email o contraseña incorrectos. Vuelva a intentarlo')
         }
       };
       User();
@@ -182,6 +184,7 @@ export default function LogIn() {
               onChange={handleChange}
               error={error.password && touch.password ? true : false}
             />
+            {serror !== null ? serror : ""}
             <FormControlLabel
               control={<Checkbox value="remember" color="#132651" />}
               label="No me olvides"
