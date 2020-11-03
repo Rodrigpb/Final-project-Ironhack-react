@@ -5,7 +5,7 @@ import './Button/Button.css';
 
 export default function NewComment(props) {
     
-
+   
 	const { TextArea } = Input;
 
 

@@ -9,6 +9,20 @@
 	-webkit-filter: blur(3px) grayscale(50%);
 }
 
+.SpaceDetail .bg-wrapper {
+    position: relative;
+    height: 100%;
+}
+.SpaceDetail .bg-wrapper > .bg-color {
+    position: absolute;
+    height: 100%;
+    background-color: #000;
+    opacity: .5;
+    z-index: 1;
+    width: 100%;
+    top: 0;
+}
+
 .SpaceDetail .text-wrap {
 	position: absolute;
 	top: 30%;

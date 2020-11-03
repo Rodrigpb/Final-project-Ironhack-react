@@ -10,7 +10,7 @@ const customIcons = {
 	5: <SmileOutlined />
 };
 
-export default function Rates({label, onChange}) {
+export default function Rates({label, onChange, name, value}) {
 	return (
 		<div className="rating d-flex align-items-center mb-2">
 				<div className="col-3">
@@ -21,12 +21,13 @@ export default function Rates({label, onChange}) {
 				</div>
 				<div className="col-9">
 					<Rate
-                        name={label}
+						value={value}
+                        name={name}
 						defaultValue={0}
 						character={({ index }) => {
 							return customIcons[index + 1];
 						}}
-						onChange={(value) => onChange({label, value})}
+						onChange={(value) => onChange({name, value})}
 					/>
 				</div>
 			

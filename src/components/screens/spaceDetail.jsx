@@ -8,6 +8,8 @@ import Comments from '../comments';
 import '../stylesheet/spaceDetail.css';
 import NewComment from '../newComment';
 import Reviews from '../reviews';
+import { StarTwoTone } from '@ant-design/icons';
+import DatePicker from 'react-datepicker';
 
 const SpaceDetail = ({ match }) => {
 	const [ space, setSpace ] = useState(null);
@@ -16,6 +18,10 @@ const SpaceDetail = ({ match }) => {
 	const [ error, setError ] = useState(null);
 	const [ change, setChange ] = useState(false);
 	const spaceId = match.params.id;
+	const [ startDate, setStartDate ] = useState(new Date());
+	const [ endDate, setEndDate ] = useState(null);
+	const [ excludeDates, setExcludeDates ] = useState([]);
+	const [ dayOpen, setDayOpen ] = useState([]);
 
 	useEffect(
 		() => {
@@ -23,6 +29,7 @@ const SpaceDetail = ({ match }) => {
 				try {
 					const space = await getSpace(spaceId);
 					setSpace(space);
+					console.log(space)
 				} catch (e) {
 					setError(e);
 				}
@@ -32,8 +39,38 @@ const SpaceDetail = ({ match }) => {
 		[ change ]
 	);
 
+	useEffect(
+		() => {
+			if (space !== null) {
+				const exclude = []
+				space.bookings.map(booking => booking.dates.map(d => exclude.push(d)))
+				let d = null;
+				const daysOpen = space.schedule.day.map((el) => {
+					el === 'Domingo' && (d = 0);
+					el === 'Lunes' && (d = 1);
+					el === 'Martes' && (d = 2);
+					el === 'Miercoles' && (d = 3);
+					el === 'Jueves' && (d = 4);
+					el === 'Viernes' && (d = 5);
+					el === 'Sabado' && (d = 6);
+					return d;
+				});
+				setExcludeDates(exclude)
+				setDayOpen(daysOpen);
+			}
+		},
+		[ space ]
+	);
+
 	const onChange = (e) => {
 		setComment(e.target.value);
+	};
+
+	const onChangeDates = (dates) => {
+		const [ start, end ] = dates;
+		setStartDate(start);
+		setEndDate(end);
+		console.log(startDate, endDate);
 	};
 
 	const onSubmit = () => {
@@ -43,7 +80,7 @@ const SpaceDetail = ({ match }) => {
 			try {
 				await newComment(spaceId, comment);
 				setSubmitting(false);
-				change === false ? setChange(true) : setChange(false);
+				setChange(!change);
 				setComment(null);
 			} catch (e) {
 				setError(e);
@@ -57,7 +94,7 @@ const SpaceDetail = ({ match }) => {
 		const deleteC = async () => {
 			try {
 				await deleteComment(id);
-				change === false ? setChange(true) : setChange(false);
+				setChange(!change);
 			} catch (e) {
 				setError(e);
 			}
@@ -66,17 +103,26 @@ const SpaceDetail = ({ match }) => {
 		deleteC();
 	};
 
+	const isWeekday = (date) => {
+		const day = date.getDay();
+		const dateNow = new Date();
+		dateNow.setDate(dateNow.getDate() - 1);
+
+		return date > dateNow && dayOpen.includes(day) && !(excludeDates.includes(date));
+	};
+
 	return (
-		<div className="SpaceDetail">
+		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
 			{space === null ? (
 				<div className="text-center">
 					<CircularProgress />
 				</div>
 			) : (
 				<div>
-					<div className="bg-space" style={{ background: `url(${space.image[0]})` }} />
-					{/* <div className='test'>
-						<img className="bg-space" src={space.image[0]} alt={space.title} /> */}
+					<div className="bg-wrapper">
+						<div className="bg-space" style={{ background: `url(${space.image[0]})` }} />
+						<div className="bg-color" />
+					</div>
 					<div className="container">
 						<div className="text-wrap">
 							<h2>{space.title}</h2>
@@ -128,10 +174,22 @@ const SpaceDetail = ({ match }) => {
 						</div>
 					</div>
 					<div className="container pt-5 pb-5">
-						<div className="h5 mt-3 mb-5 font-weight-bold">
-							Evaluaciones {space.reviews.length > 1 ? `(${space.reviews.length})` : ''}
-							<span className='ml-5'>
-								<Reviews spaceId={space.id} />
+						<div className="h5 mt-3 mb-5 font-weight-bold d-flex align-items-center">
+							<span className="d-flex align-items-center">
+								{' '}
+								<StarTwoTone twoToneColor="#D1A617" />
+							</span>
+							{space.reviews.length > 1 ? (
+								`${(space.reviews.reduce((acum, val) => acum + val.rating.generalExperience, 0) *
+									2 *
+									10 /
+									space.reviews.length).toFixed(1)}  `
+							) : (
+								0
+							)}{' '}
+							( {space.reviews.length > 1 ? `${space.reviews.length}` : 0} Evaluaciones)
+							<span className="ml-5">
+								<Reviews spaceId={space.id} setchange={setChange} change={change} />
 							</span>
 						</div>
 
@@ -139,47 +197,41 @@ const SpaceDetail = ({ match }) => {
 							<div className="col-md-6">
 								<Ratingbar
 									label="limpieza"
-									percent={
-										space.reviews.reduce((acum, val) => acum + val.rating.clean, 0) /
-										space.reviews.length
-									}
+									percent={(space.reviews.reduce((acum, val) => acum + val.rating.clean, 0) *
+										10 /
+										space.reviews.length).toFixed(2)}
 								/>
 								<Ratingbar
 									label="veracidad"
-									percent={
-										space.reviews.reduce((acum, val) => acum + val.rating.veracity, 0) /
-										space.reviews.length
-									}
+									percent={(space.reviews.reduce((acum, val) => acum + val.rating.veracity, 0) *
+										10 /
+										space.reviews.length).toFixed(2)}
 								/>
 								<Ratingbar
 									label="comunicación"
-									percent={
-										space.reviews.reduce((acum, val) => acum + val.rating.communication, 0) /
-										space.reviews.length
-									}
+									percent={(space.reviews.reduce((acum, val) => acum + val.rating.communication, 0) *
+										10 /
+										space.reviews.length).toFixed(2)}
 								/>
 							</div>
 							<div className="col-md-6">
 								<Ratingbar
 									label="localización"
-									percent={
-										space.reviews.reduce((acum, val) => acum + val.rating.location, 0) /
-										space.reviews.length
-									}
+									percent={(space.reviews.reduce((acum, val) => acum + val.rating.location, 0) *
+										10 /
+										space.reviews.length).toFixed(2)}
 								/>
 								<Ratingbar
 									label="llegada"
-									percent={
-										space.reviews.reduce((acum, val) => acum + val.rating.arrival, 0) /
-										space.reviews.length
-									}
+									percent={(space.reviews.reduce((acum, val) => acum + val.rating.arrival, 0) *
+										10 /
+										space.reviews.length).toFixed(2)}
 								/>
 								<Ratingbar
 									label="servicios"
-									percent={
-										space.reviews.reduce((acum, val) => acum + val.rating.services, 0) /
-										space.reviews.length
-									}
+									percent={(space.reviews.reduce((acum, val) => acum + val.rating.services, 0) *
+										10 /
+										space.reviews.length).toFixed(2)}
 								/>
 							</div>
 						</div>
@@ -195,6 +247,26 @@ const SpaceDetail = ({ match }) => {
 							error={error}
 							submitting={submitting}
 						/>
+					</div>
+					<div className="container-fluid gray">
+						<div className="container pt-5 pb-5">
+							<div className="h5 mt-3 mb-5 font-weight-bold">Reserva tu espacio ahora</div>
+
+							<div className="row">
+								<div className="col-md-12 d-flex justify-content-center">
+									<DatePicker
+										selected={startDate}
+										onChange={onChangeDates}
+										startDate={startDate}
+										endDate={endDate}
+										monthsShown={2}
+										filterDate={isWeekday}
+										selectsRange
+										inline
+									/>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			)}

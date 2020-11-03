@@ -7,8 +7,10 @@ import { withRouter } from "react-router-dom";
 const App = ({ location }) => {
   return (
     <div className="App">
+
       {location.pathname !== '/login' &&  <Header />}
       <Routes />
+
     </div>
   );
 }

@@ -8,16 +8,17 @@ class Reviews extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            General : 0,
-            Limpieza : 0,
-            Veracidad : 0,
-            Comunicacion : 0,
-            Localizacion : 0,
-            Llegada : 0,
-            Servicios : 0,
+            generalExperience : 0, 
+            clean: 0,
+            veracity : 0,
+            location : 0,
+            arrival : 0,
+            services : 0,
+            communication : 0,
             visible: false,
             confirmLoading: false,
-            error : null
+            error : null,
+            visibleok : false
         };
     }
 	
@@ -35,13 +36,16 @@ class Reviews extends React.Component {
         delete review.visible
         delete review.confirmLoading
         delete review.error
-        console.log(this.props.spaceId)
+        
 
+        
         const sendReview = async () => { 
 			try {
-				await newReview(this.props.spaceId, review);
+                await newReview(this.props.spaceId, review);
+				this.setState({visibleok : true}) 
+				this.props.setChange(!this.props.change)           
 			} catch (e) {
-				this.setState({error: e})
+				console.log(e)
 			}
 		};
 
@@ -49,10 +53,23 @@ class Reviews extends React.Component {
         
 		setTimeout(() => {
 			this.setState({
+                generalExperience : 0, 
+                clean: 0,
+                veracity : 0,
+                location : 0,
+                arrival : 0,
+                services : 0,
+                communication : 0,
 				visible: false,
 				confirmLoading: false
 			});
-		}, 2000);
+        }, 2000);
+        
+        setTimeout(() => {
+            this.setState({
+                visibleok : false
+            })
+        }, 5000)
 	};
 
 	handleCancel = () => {
@@ -62,24 +79,24 @@ class Reviews extends React.Component {
 	};
 
 	onChange = (e) => {
-        const {label, value} = e
-		console.log(this.state);
+        const {name, value} = e
 		this.setState({
-		    [label] : value
+		    [name] : value
 		})
 	};
 
 	render() {
-		const { visible, confirmLoading } = this.state;
+        const { visible, confirmLoading } = this.state;
 		return (
 			<span>
 				<Button
 					className="button"
-					style={{ padding: '10px 20px', border: '0', height: '100%', borderRadius: '5px' }}
+					style={{ marginBottom: '0', padding: '10px 20px', border: '0', height: '100%', borderRadius: '5px' }}
 					onClick={this.showModal}
 				>
 					Introducir Evaluación
 				</Button>
+                {this.state.visibleok && <Alert style={{margin:'5px 0'}} message="Gracias por tu evaluación" type="success" showIcon closable /> }
                 {this.state.error !== null && <Alert style={{margin:'5px 0'}} message={this.state.error} type="error" showIcon closable />}
 				<Modal
 					title="Evalúa el paso por este espacio"
@@ -88,13 +105,13 @@ class Reviews extends React.Component {
 					confirmLoading={confirmLoading}
 					onCancel={this.handleCancel}
 				>
-					<Rates label="General" onChange={this.onChange} />
-					<Rates label="Limpieza" onChange={this.onChange} />
-					<Rates label="Veracidad" onChange={this.onChange} />
-					<Rates label="Comunicacion" onChange={this.onChange} />
-					<Rates label="Localizacion" onChange={this.onChange} />
-					<Rates label="Llegada" onChange={this.onChange} />
-					<Rates label="Servicios" onChange={this.onChange} />
+					<Rates label="General" value={this.state.generalExperience} name="generalExperience" onChange={this.onChange} />
+					<Rates label="Limpieza" value={this.state.clean} name='clean' onChange={this.onChange} />
+					<Rates label="Veracidad" value={this.state.veracity} name="veracity" onChange={this.onChange} />
+					<Rates label="Comunicacion" value={this.state.communication} name='communication' onChange={this.onChange} />
+					<Rates label="Localizacion" value={this.state.location} name='location' onChange={this.onChange} />
+					<Rates label="Llegada" value={this.state.arrival} name='arrival' onChange={this.onChange} />
+					<Rates label="Servicios" value={this.state.services} name='services' onChange={this.onChange} />
 				</Modal>
 			</span>
 		);

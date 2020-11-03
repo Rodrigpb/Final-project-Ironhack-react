@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from './contexts/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 ReactDOM.render(
 	<React.StrictMode>

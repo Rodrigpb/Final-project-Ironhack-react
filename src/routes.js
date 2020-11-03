@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Home from './components/home/home';
@@ -8,21 +7,22 @@ import NewSpace from './components/screens/newSpace';
 import { AuthenticatedRoute } from './components/AuthenticatedRoute/AutenticatedRoute';
 import SearchSpace from './components/screens/searchSpace';
 import SignUp from './components/signUp/signUp';
+import SpaceDetail from './components/screens/spaceDetail';
 
 function Routes() {
 	return (
-		<div >
+		<div>
 			<Switch>
-
-        <AuthenticatedRoute exact path='/profile' component={Profile}/>
+				<AuthenticatedRoute exact path="/profile" component={Profile} />
 				{/* <AuthenticatedRoute exact path="/new-space" component={NewSpace} /> */}
-        <Route exact path="/new-space" component={NewSpace} />
-				<Route exact path="/" component={Home}/>
-        <Route exact path="/login" component={Login}/>
-        <Route exact path="/register" component={SignUp}/>
-        <Route exact path="/search" component={SearchSpace}/>
-				<Redirect to="/"/>
-
+				<Route exact path="/new-space" component={NewSpace} />
+				<Route exact path="/search/:search" component={SearchSpace} />
+				<Route exact path="/" component={Home} />
+				<Route exact path="/login" component={Login} />
+				<Route exact path="/register" component={SignUp} />
+				<Route exact path="/search" component={SearchSpace} />
+				<Route exact path="/space/:id" component={SpaceDetail} />
+				<Redirect to="/" />
 			</Switch>
 		</div>
 	);

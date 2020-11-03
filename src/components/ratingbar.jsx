@@ -13,7 +13,7 @@ export default function Ratingbar({ percent, label }) {
 					</label>
 				</div>
 				<div className="col-8">
-					<Progress percent={percent} size="small" />
+					<Progress strokeColor='#132651' format={(percent) => `${percent}`} percent={percent * 2} size="small" />
 				</div>
 			</div>
 		</div>
