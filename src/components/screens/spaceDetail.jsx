@@ -10,6 +10,7 @@ import NewComment from '../newComment';
 import Reviews from '../reviews';
 import { StarTwoTone } from '@ant-design/icons';
 import DatePicker from 'react-datepicker';
+import Button from '../Button/Button';
 
 const SpaceDetail = ({ match }) => {
 	const [ space, setSpace ] = useState(null);
@@ -18,10 +19,12 @@ const SpaceDetail = ({ match }) => {
 	const [ error, setError ] = useState(null);
 	const [ change, setChange ] = useState(false);
 	const spaceId = match.params.id;
-	const [ startDate, setStartDate ] = useState(new Date());
+	const [ startDate, setStartDate ] = useState(null);
 	const [ endDate, setEndDate ] = useState(null);
 	const [ excludeDates, setExcludeDates ] = useState([]);
 	const [ dayOpen, setDayOpen ] = useState([]);
+	const [ services, setServices ] = useState(10);
+	const [ total, setTotal ] = useState(null);
 
 	useEffect(
 		() => {
@@ -29,7 +32,7 @@ const SpaceDetail = ({ match }) => {
 				try {
 					const space = await getSpace(spaceId);
 					setSpace(space);
-					console.log(space)
+					console.log(space);
 				} catch (e) {
 					setError(e);
 				}
@@ -42,8 +45,8 @@ const SpaceDetail = ({ match }) => {
 	useEffect(
 		() => {
 			if (space !== null) {
-				const exclude = []
-				space.bookings.map(booking => booking.dates.map(d => exclude.push(d)))
+				const exclude = [];
+				space.bookings.map((booking) => booking.dates.map((d) => exclude.push(d)));
 				let d = null;
 				const daysOpen = space.schedule.day.map((el) => {
 					el === 'Domingo' && (d = 0);
@@ -55,12 +58,19 @@ const SpaceDetail = ({ match }) => {
 					el === 'Sabado' && (d = 6);
 					return d;
 				});
-				setExcludeDates(exclude)
+				setExcludeDates(exclude);
 				setDayOpen(daysOpen);
 			}
 		},
 		[ space ]
 	);
+
+
+	useEffect(() => {
+		if (startDate !== null && endDate !== null) {
+			setTotal(space.price * (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+		}
+	}, [startDate, endDate])
 
 	const onChange = (e) => {
 		setComment(e.target.value);
@@ -70,7 +80,8 @@ const SpaceDetail = ({ match }) => {
 		const [ start, end ] = dates;
 		setStartDate(start);
 		setEndDate(end);
-		console.log(startDate, endDate);
+		
+		
 	};
 
 	const onSubmit = () => {
@@ -108,8 +119,9 @@ const SpaceDetail = ({ match }) => {
 		const dateNow = new Date();
 		dateNow.setDate(dateNow.getDate() - 1);
 
-		return date > dateNow && dayOpen.includes(day) && !(excludeDates.includes(date));
+		return date > dateNow && dayOpen.includes(day) && !excludeDates.includes(date);
 	};
+
 
 	return (
 		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
@@ -250,12 +262,31 @@ const SpaceDetail = ({ match }) => {
 					</div>
 					<div className="container-fluid gray">
 						<div className="container pt-5 pb-5">
-							<div className="h5 mt-3 mb-5 font-weight-bold">Reserva tu espacio ahora</div>
+							
+							<div className="h5 mt-3 mb-5 ml-4 font-weight">
+								{startDate === null ? (
+									'Seleciona la fecha de entrada'
+								) : endDate === null ? (
+									'Selecciona la fecha de salida'
+								) : (
+									`${(endDate.getTime() - startDate.getTime()) /
+										(1000 * 60 * 60 * 24)} días en ${space.title}`
+								)}
+								<small className="ml-3 mt-1 font-weight-light text-muted d-block">
+									{startDate !== null &&
+										endDate !== null &&
+										`${startDate.getDay() + 1} de ${startDate.toLocaleString('default', {
+											month: 'short'
+										})} de ${startDate.getFullYear()} - ${endDate.getDay() +
+											1} de ${endDate.toLocaleString('default', {
+											month: 'short'
+										})} de ${endDate.getFullYear()}`}
+								</small>
+							</div>
 
 							<div className="row">
 								<div className="col-md-12 d-flex justify-content-center">
 									<DatePicker
-										selected={startDate}
 										onChange={onChangeDates}
 										startDate={startDate}
 										endDate={endDate}
@@ -264,6 +295,58 @@ const SpaceDetail = ({ match }) => {
 										selectsRange
 										inline
 									/>
+									<div className="card-price">
+										<div className='price'> {space.price}€/dia</div>
+										<div className='d-flex'>
+										<div className='d-flex flex-column justify-content-center text-center'>
+										<span>Entrada</span>
+											<small className='font-weight-light text-muted'>
+												
+												{startDate !== null &&
+													`${startDate.getDay() +
+														1} de ${startDate.toLocaleString('default', {
+														month: 'short'
+													})} de ${startDate.getFullYear()}`}
+											</small>
+											</div>
+											<div className='d-flex flex-column justify-content-center text-center ml-3'>
+											<span>Salida</span>
+											<small className='font-weight-light text-muted d-block'>
+												
+												{endDate !== null &&
+													`${endDate.getDay() + 1} de ${endDate.toLocaleString('default', {
+														month: 'short'
+													})} de ${endDate.getFullYear()}`}
+											</small>
+											</div>
+										</div>
+										<Button />
+										<div>
+											<div>
+												{startDate !== null &&
+													endDate !== null &&
+													`${space.price} x ${(endDate.getTime() - startDate.getTime()) /
+														(1000 * 60 * 60 * 24)} días`}
+												<span>
+													{startDate !== null &&
+														endDate !== null &&
+														`${total} €`}{' '}
+												</span>
+											</div>
+											<div>
+												{startDate !== null && endDate !== null && `Gastos de servicio`}
+												<span>
+													{startDate !== null && endDate !== null && `${services} €`}{' '}
+												</span>
+											</div>
+											<div>
+												{startDate !== null && endDate !== null && `Total`}
+												<span>
+													{startDate !== null && endDate !== null && `${services + total} €`}{' '}
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

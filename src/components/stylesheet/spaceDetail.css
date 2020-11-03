@@ -62,3 +62,13 @@
 	padding-top: 5px;
 	margin-bottom: 5px;
 }
+
+.card-price {
+	background: white;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.card-price > .price {
+	font-weight: bold;
+}
