@@ -1,10 +1,13 @@
 import React from 'react';
 import FormUserDetails from './formUserDetails'
 import FormBusinessDetails from './formBusinessDetails'
+import { useAuthContext } from '../../contexts/AuthContext';
+
 
 export default class SignUp extends React.Component {
  
   state= {
+      data : {
       step: 1,
       firstName: '',
       lastName: '',
@@ -15,8 +18,17 @@ export default class SignUp extends React.Component {
       nif:'',
       razonSocial: '',
       direccion: ''
+    },
+      error: {
+        email: true,
+        password: true
+      },
+      touch: {}
   }
+
   
+  
+
 // Proceed to next step
 nextStep = () => {
   const { step } = this.state;
@@ -34,13 +46,22 @@ prevStep = () => {
 };
 
 // Handle fields change
-handleChange = input => e => {
-  this.setState({ [input]: e.target.value });
+handleChange = (e) => {
+  const { name, value } = e.target;
+  this.setState({
+    data: { ...this.state.data, [name]: value },
+    error: {},
+    touch:{}
+    });
 };
 
 handleSubmit = (e) => {
   e.preventDefault();
   console.log("Hola")
+
+  const newUser = async () => {
+    
+  }
 }
 
 render() {
