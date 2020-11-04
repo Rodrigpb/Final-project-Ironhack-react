@@ -8,18 +8,20 @@ export default class SignUp extends React.Component {
  
   state= {
       data : {
-      step: 1,
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      avatar: '',
-      number: '',
-      nif:'',
-      razonSocial: '',
-      direccion: ''
+        step: 1,
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        avatar: '',
+        number: '',
+        nif:'',
+        razonSocial: '',
+        direccion: ''
     },
       error: {
+        firstName: true,
+        lastName: true,
         email: true,
         password: true
       },
@@ -29,25 +31,23 @@ export default class SignUp extends React.Component {
   
   
 
-// Proceed to next step
 nextStep = () => {
-  const { step } = this.state;
+  const { step } = this.state.data;
   this.setState({
     step: step + 1
   });
 };
 
-// Go back to prev step
 prevStep = () => {
-  const { step } = this.state;
+  const { step } = this.state.data;
   this.setState({
     step: step - 1
   });
 };
 
-// Handle fields change
 handleChange = (e) => {
   const { name, value } = e.target;
+  
   this.setState({
     data: { ...this.state.data, [name]: value },
     error: {},
