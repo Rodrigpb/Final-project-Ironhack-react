@@ -65,8 +65,9 @@ handleSubmit = (e) => {
 }
 
 render() {
-    const { step } = this.state;
+    const { step } = this.state.data;
 
+    
     switch (step) {
       case 1:
         return (

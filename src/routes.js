@@ -13,7 +13,7 @@ function Routes() {
 	return (
 		<div>
 			<Switch>
-				<AuthenticatedRoute exact path="/profile" component={Profile} />
+				<AuthenticatedRoute exact path="/profile/:id" component={Profile} />
 				{/* <AuthenticatedRoute exact path="/new-space" component={NewSpace} /> */}
 				<Route exact path="/new-space" component={NewSpace} />
 				<Route exact path="/search/:search" component={SearchSpace} />

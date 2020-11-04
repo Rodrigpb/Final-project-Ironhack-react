@@ -39,8 +39,10 @@ const Header = (props) => {
 					</Link>
 					{user ? (
 						<div>
+						<Link className="color-logo" to={`/profile/${user.id}`}>
 							<Avatar src={user.avatar} />
-							user.name
+							<span className='ml-3'>{user.name}</span>
+							</Link>
 						</div>
 					) : (
 						<Link className="color-logo" to="/login">
