@@ -61,7 +61,7 @@ export default function FormUserDetails(props) {
                 autoComplete="given-name"
                 name="firstName"
                 value={value.firstName}
-                onChange={handleChange('firstName')}
+                onChange={handleChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -79,7 +79,7 @@ export default function FormUserDetails(props) {
                 label="Apellido"
                 name="lastName"
                 value={value.lastName}
-                onChange={handleChange('lastName')}
+                onChange={handleChange}
                 autoComplete="family-name"
               />
             </Grid>
@@ -92,7 +92,7 @@ export default function FormUserDetails(props) {
                 label="Correo electrónico"
                 name="email"
                 value={value.email}
-                onChange={handleChange('email')}
+                onChange={handleChange}
                 autoComplete="email"
               />
             </Grid>
@@ -103,7 +103,7 @@ export default function FormUserDetails(props) {
                 fullWidth
                 name="password"
                 value={value.password}
-                onChange={handleChange('password')}
+                onChange={handleChange}
                 label="Contraseña"
                 type="password"
                 id="password"
