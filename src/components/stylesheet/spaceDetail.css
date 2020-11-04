@@ -66,9 +66,28 @@
 .card-price {
 	background: white;
     border-radius: 20px;
-    padding: 20px;
+	padding: 20px;
+	margin-left: 30px;
+	width: 17em;
+	box-shadow: 5px 5px 15px gray;
 }
 
 .card-price > .price {
 	font-weight: bold;
+}
+
+.card-price .price-service {
+	border-bottom: 1px solid lightgray;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
+.button-chat {
+	position: absolute;
+	bottom: 0;
+
+}
+
+.button-chat .button {
+	margin-bottom: 5px !important;
 }
