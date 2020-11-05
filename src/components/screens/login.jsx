@@ -96,7 +96,6 @@ export default function LogIn() {
       const User = async () => {
         try {
           const user = await minilogin(state.data)
-          console.log('hola', user)
           login(user)
         } catch (e) {
           setError('Email o contraseña incorrectos. Vuelva a intentarlo')
@@ -180,9 +179,10 @@ export default function LogIn() {
               onChange={handleChange}
               error={error.password && touch.password ? true : false}
             />
-            {serror !== null ? serror : ""}
+            {serror !== null ? <div class="alert alert-danger" role="alert">{serror}</div> : ""}
+            
             <FormControlLabel
-              control={<Checkbox value="remember" color="#132651" />}
+              control={<Checkbox value="remember" />}
               label="No me olvides"
             />
             <Button

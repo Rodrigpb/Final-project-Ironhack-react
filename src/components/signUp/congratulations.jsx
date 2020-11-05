@@ -1,7 +1,6 @@
   
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import { useHistory } from 'react-router-dom';import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -12,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { MailTwoTone } from '@ant-design/icons'
+import Button from '../Button/Button'
+import { Result } from 'antd';
 
 
 
@@ -23,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    margin: theme.spacing(2),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -37,39 +37,34 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Congratulations(props) {
   const classes = useStyles();
+  const history = useHistory();
+
+  const onClick = () => {
+      console.log("Holla")
+      history.push("/login")
+  }
  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <Result status="success"/>,
         <Typography component="h1" variant="h5">
           ¡Enhorabuena!
         </Typography>
-        <MailTwoTone />
         <Typography component="h1" variant="h5">
-          Has finalizado el registo. Comprueba tu correo para verificar tu cuenta.
+          Has finalizado el registo.
         </Typography>
-        <Typography component="h1" variant="h5">
+        <MailTwoTone className={classes.avatar} />
+        <Typography component="h1" variant="h5" align="center">
           Comprueba tu correo para verificar tu cuenta.
         </Typography>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            <Link href="/login">
-                COntinuar
-              </Link>
-          </Button>
+          <Button 
+          name="Inicia sesión"
+          onClick={onClick}
+          />
           <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2">
-                ¿Ya eres usuario? Inicia sesión
-              </Link>
-            </Grid>
+            
           </Grid>
         
       </div>
