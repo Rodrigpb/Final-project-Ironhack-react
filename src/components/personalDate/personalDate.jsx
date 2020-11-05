@@ -9,7 +9,6 @@ import './personalDate.css';
 
 const PersonalDate = ({ userProfile }) => {
 	const { user } = useAuthContext();
-	const [ change, setChange ] = useState(false);
 	const [ state, setState ] = useState({
 		name: userProfile.name,
 		number: userProfile.number,
@@ -50,7 +49,7 @@ const PersonalDate = ({ userProfile }) => {
 	const handleSubmit = () => {
 		const update = async () => {
 			try {
-				const userUpdate = await updateUser(user.id, state);
+				const userUpdate = await updateUser(userProfile.id, state);
 				setVisible(false)
 			} catch (e) {
 				console.log(e);

@@ -32,6 +32,10 @@ const SpaceDetail = ({ match }) => {
 	const [ open, setOpen ] = useState(false);
 	const [ bookingReserve, setBookingReserve ] = useState(null);
 	const { user } = useAuthContext();
+	const containerStyle = {
+		width: '400px',
+		height: '400px'
+	};
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -165,7 +169,7 @@ const SpaceDetail = ({ match }) => {
 	return (
 		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
 			{space === null ? (
-				<div className="text-center">
+				<div className="text-center" style={{marginTop: '30px'}}>
 					<CircularProgress />
 				</div>
 			) : (
@@ -202,7 +206,7 @@ const SpaceDetail = ({ match }) => {
 						<div className="row">
 							<div className="col-md-6">{space.description}</div>
 							<div className="col-md-6">
-								<MapsDetail
+								<MapsDetail containerStyle={containerStyle}
 									center={{ lat: space.location.coordinates[0], lng: space.location.coordinates[1] }}
 								/>
 								<div className="contact-detail mt-3">

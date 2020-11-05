@@ -3,7 +3,7 @@ import { MehOutlined, SmileTwoTone } from '@ant-design/icons';
 import React, { useCallback, useState } from 'react';
 import '../stylesheet/newSpace.css';
 import InputNumberWithLabel from '../inputNumberwithLabel';
-import MyMap from '../googleMaps';
+import MyMap from '../Maps/googleMaps';
 import Button from '../Button/Button';
 import { newSpace } from '../../services/api.service';
 import { useHistory } from 'react-router-dom';

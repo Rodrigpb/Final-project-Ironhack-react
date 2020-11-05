@@ -4,7 +4,7 @@ import './cardSpace.css';
 
 const CardSpace = ({ space }) => {
 	return (
-		<div className="col-lg-4 card-space">
+		<div className="col-lg-5 card-space">
 			<Link className="not-link" to={`/space/${space.id}`}>
 				<img src={space.image[0]} alt={space.title} width="100%" />
 				<h5 className="mt-2 mb-2">{space.title}</h5>

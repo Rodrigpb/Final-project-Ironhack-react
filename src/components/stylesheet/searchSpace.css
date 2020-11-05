@@ -5,5 +5,40 @@
 
 .SearchSpace {
     margin-top: 8em;
-
 }
+
+.MuiPaper-elevation1 {
+    box-shadow:none !important;
+    border-bottom: 1px solid lightgray !important;
+    padding-bottom: 5px !important;
+    margin-bottom: 2em !important;
+   
+}
+
+.MuiAccordionSummary-content {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.SearchSpace .title-search {
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.SearchSpace .element-search{
+    border: 0;
+    background-color: transparent;
+    display: block;
+    font-weight: 400;
+    margin-bottom: 10px;
+    width: 63%;
+    text-align: left;
+    padding: 5px 19px;
+}
+
+.SearchSpace .selected {
+    background-color : #1891ff;
+    color: white;
+}
+
