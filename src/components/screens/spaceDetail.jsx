@@ -1,7 +1,7 @@
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Dialog, DialogContent} from '@material-ui/core';
 import { Image } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { deleteComment, getSpace, newComment } from '../../services/api.service';
+import { deleteComment, getSpace, newComment} from '../../services/api.service';
 import MapsDetail from '../mapsDetail';
 import Ratingbar from '../ratingbar';
 import Comments from '../comments';
@@ -11,6 +11,9 @@ import Reviews from '../reviews';
 import { StarTwoTone } from '@ant-design/icons';
 import DatePicker from 'react-datepicker';
 import Button from '../Button/Button';
+import Strike from '../Strike/strike';
+import Chat from '../Chat/chat';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const SpaceDetail = ({ match }) => {
 	const [ space, setSpace ] = useState(null);
@@ -25,6 +28,17 @@ const SpaceDetail = ({ match }) => {
 	const [ dayOpen, setDayOpen ] = useState([]);
 	const [ services, setServices ] = useState(10);
 	const [ total, setTotal ] = useState(null);
+	const [ totalPay, setTotalPay ] = useState(null);
+	const [ open, setOpen ] = useState(false);
+	const { user } = useAuthContext()
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	useEffect(
 		() => {
@@ -65,12 +79,15 @@ const SpaceDetail = ({ match }) => {
 		[ space ]
 	);
 
-
-	useEffect(() => {
-		if (startDate !== null && endDate !== null) {
-			setTotal(space.price * (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
-		}
-	}, [startDate, endDate])
+	useEffect(
+		() => {
+			if (startDate !== null && endDate !== null) {
+				setTotal(space.price * (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+				setTotalPay(total + services);
+			}
+		},
+		[ startDate, endDate, total ]
+	);
 
 	const onChange = (e) => {
 		setComment(e.target.value);
@@ -80,8 +97,6 @@ const SpaceDetail = ({ match }) => {
 		const [ start, end ] = dates;
 		setStartDate(start);
 		setEndDate(end);
-		
-		
 	};
 
 	const onSubmit = () => {
@@ -122,6 +137,30 @@ const SpaceDetail = ({ match }) => {
 		return date > dateNow && dayOpen.includes(day) && !excludeDates.includes(date);
 	};
 
+	const getDaysArray = function(start, end) {
+		for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+			arr.push(new Date(dt));
+		}
+		return arr;
+	};
+
+	const handleClickPay = () => {
+		if (startDate === null || endDate === null) {
+			return;
+		}
+
+		handleClickOpen();
+
+		const dates = getDaysArray(startDate, endDate);
+		const booking = {
+			dayShifth: space.schedule.available,
+			dates: dates,
+			price: totalPay,
+			type: space.type[0]
+		};
+	};
+
+
 
 	return (
 		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
@@ -135,6 +174,8 @@ const SpaceDetail = ({ match }) => {
 						<div className="bg-space" style={{ background: `url(${space.image[0]})` }} />
 						<div className="bg-color" />
 					</div>
+					{/* {(user !== null && user.id !== space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""} */}
+					{(user !== null && user.id === space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""}
 					<div className="container">
 						<div className="text-wrap">
 							<h2>{space.title}</h2>
@@ -155,7 +196,11 @@ const SpaceDetail = ({ match }) => {
 					</div>
 					<div className="container mt-5">
 						<div className="row">
-							<div className="col-md-6">{space.description}</div>
+							<div className="col-md-6">
+								{space.description}
+
+							
+							</div>
 							<div className="col-md-6">
 								<MapsDetail
 									center={{ lat: space.location.coordinates[0], lng: space.location.coordinates[1] }}
@@ -164,8 +209,20 @@ const SpaceDetail = ({ match }) => {
 									<div>{space.location.direction}</div>
 									<div>{space.location.city}</div>
 									<div>
-										<b>HORARIO</b>
-										{space.location.direction}
+										<div>
+											<b>HORARIO</b>
+										</div>
+										<div className="ml-2">
+											{space.schedule.day.map((day) => day.slice(0, 2)).join(' - ')}
+											<div>
+												{space.schedule.available === 'Todo el dia' ? (
+													space.schedule.available
+												) : (
+													`Turno de ${space.schedule.available}`
+												)}
+											</div>
+											<div>{`De ${space.schedule.checkIn} a ${space.schedule.checkOut}`}</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -262,7 +319,6 @@ const SpaceDetail = ({ match }) => {
 					</div>
 					<div className="container-fluid gray">
 						<div className="container pt-5 pb-5">
-							
 							<div className="h5 mt-3 mb-5 ml-4 font-weight">
 								{startDate === null ? (
 									'Seleciona la fecha de entrada'
@@ -285,7 +341,7 @@ const SpaceDetail = ({ match }) => {
 							</div>
 
 							<div className="row">
-								<div className="col-md-12 d-flex justify-content-center">
+								<div className="col-md-12 d-flex justify-content-center align-items-center">
 									<DatePicker
 										onChange={onChangeDates}
 										startDate={startDate}
@@ -296,53 +352,68 @@ const SpaceDetail = ({ match }) => {
 										inline
 									/>
 									<div className="card-price">
-										<div className='price'> {space.price}€/dia</div>
-										<div className='d-flex'>
-										<div className='d-flex flex-column justify-content-center text-center'>
-										<span>Entrada</span>
-											<small className='font-weight-light text-muted'>
-												
-												{startDate !== null &&
-													`${startDate.getDay() +
-														1} de ${startDate.toLocaleString('default', {
-														month: 'short'
-													})} de ${startDate.getFullYear()}`}
-											</small>
+										<div className="price mb-3"> {space.price}€/dia</div>
+										<div className="d-flex pb-3 justify-content-center">
+											<div className="d-flex flex-column justify-content-center text-center">
+												<span>Entrada</span>
+												<small className="font-weight-light text-muted">
+													{startDate !== null ? (
+														`${startDate.getDay() +
+															1} de ${startDate.toLocaleString('default', {
+															month: 'short'
+														})} de ${startDate.getFullYear()}`
+													) : (
+														'Elige una fecha'
+													)}
+												</small>
 											</div>
-											<div className='d-flex flex-column justify-content-center text-center ml-3'>
-											<span>Salida</span>
-											<small className='font-weight-light text-muted d-block'>
-												
-												{endDate !== null &&
-													`${endDate.getDay() + 1} de ${endDate.toLocaleString('default', {
-														month: 'short'
-													})} de ${endDate.getFullYear()}`}
-											</small>
+											<div className="d-flex flex-column justify-content-center text-center ml-3">
+												<span>Salida</span>
+												<small className="font-weight-light text-muted d-block">
+													{endDate !== null ? (
+														`${endDate.getDay() +
+															1} de ${endDate.toLocaleString('default', {
+															month: 'short'
+														})} de ${endDate.getFullYear()}`
+													) : (
+														'Elige una fecha'
+													)}
+												</small>
 											</div>
 										</div>
-										<Button />
-										<div>
-											<div>
-												{startDate !== null &&
-													endDate !== null &&
-													`${space.price} x ${(endDate.getTime() - startDate.getTime()) /
-														(1000 * 60 * 60 * 24)} días`}
-												<span>
+										<Dialog
+											scroll="body"
+											open={open}
+											onClose={handleClose}
+											aria-labelledby="form-dialog-title"
+										>
+											<DialogContent>
+												<Strike pay={totalPay} />
+											</DialogContent>
+										</Dialog>
+										<Button name="Reservar" onClick={handleClickPay} />
+										<div className="pt-3">
+											<div className="d-flex justify-content-between font-weight-light">
+												<div>
 													{startDate !== null &&
 														endDate !== null &&
-														`${total} €`}{' '}
-												</span>
+														`${space.price} x ${(endDate.getTime() - startDate.getTime()) /
+															(1000 * 60 * 60 * 24)} días`}
+												</div>
+												<span>{startDate !== null && endDate !== null && `${total} €`} </span>
 											</div>
-											<div>
-												{startDate !== null && endDate !== null && `Gastos de servicio`}
+											<div className="d-flex justify-content-between price-service font-weight-light">
+												<div>
+													{startDate !== null && endDate !== null && `Gastos de servicio`}
+												</div>
 												<span>
 													{startDate !== null && endDate !== null && `${services} €`}{' '}
 												</span>
 											</div>
-											<div>
-												{startDate !== null && endDate !== null && `Total`}
+											<div className="d-flex justify-content-between font-weight-bold">
+												<div>{startDate !== null && endDate !== null && `Total`}</div>
 												<span>
-													{startDate !== null && endDate !== null && `${services + total} €`}{' '}
+													{startDate !== null && endDate !== null && `${totalPay} €`}{' '}
 												</span>
 											</div>
 										</div>
@@ -350,7 +421,9 @@ const SpaceDetail = ({ match }) => {
 								</div>
 							</div>
 						</div>
+						
 					</div>
+					
 				</div>
 			)}
 		</div>

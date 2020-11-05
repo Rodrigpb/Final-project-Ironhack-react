@@ -106,8 +106,10 @@ handleBlur = (e) => {
 
 render() {
     const { step } = this.state.data;
+
     const isError = Object.values(this.state.error).some((el) => el);
     console.log(isError)
+
     switch (step) {
       case 1:
         return (

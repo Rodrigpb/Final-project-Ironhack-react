@@ -1,0 +1,15 @@
+.sc-header--img {
+    width: 50px !important;
+}
+
+.sc-chat-window .opened, .sc-chat-window {
+    z-index: 100 !important;
+}
+
+.sc-launcher {
+    background-color: #132651;
+}
+
+.sc-header {
+   background: #00B389 !important;
+}

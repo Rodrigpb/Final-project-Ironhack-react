@@ -1,0 +1,10 @@
+.menu-profile {
+    /* position: fixed !important;
+    top: 3em; */
+    margin-top: 9em;
+}
+
+.ant-menu {
+    padding-bottom: 20em !important;
+    padding-top: 1em !important;
+}
