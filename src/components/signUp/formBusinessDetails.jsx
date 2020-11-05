@@ -28,7 +28,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(18),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -38,26 +38,36 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 3, 2),
   },
+  disable: {
+    margin: theme.spacing(3, 3, 2),
+    opacity: .5,
+  }
 }));
 
 export default function FormBusinessDetails(props) {
   const classes = useStyles();
 
-  const { value, handleChange } = props;
-
+  const { handleChange, handleBlur, disable } = props;
+  const {data, error, touch,} = props.value
+  
   const backward = (e) => {
     e.preventDefault();
     props.prevStep();
   };
 
+  const fordward = (e) => {
+    e.preventDefault();
+    props.nextStep();
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" >
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -66,14 +76,16 @@ export default function FormBusinessDetails(props) {
         <Typography component="h1" variant="h5">
           Datos profesionales
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 name="number"
                 type="tel"
-                value={value.number}
-                onChange={handleChange('number')}
+                value={data.number}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={error.number && touch.number ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -90,9 +102,8 @@ export default function FormBusinessDetails(props) {
                 id="razonSocial"
                 label="Razón Social"
                 name="razonSocial"
-                value={value.razonSocial}
-                onChange={handleChange('razonSocial')}
-                
+                value={data.razonSocial}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -102,8 +113,8 @@ export default function FormBusinessDetails(props) {
                 id="nif"
                 label="NIF"
                 name="nif"
-                value={value.nif}
-                onChange={handleChange('nif')}
+                value={data.nif}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -113,8 +124,8 @@ export default function FormBusinessDetails(props) {
                 id="direccion"
                 label="Domicilio Fiscal"
                 name="direccion"
-                value={value.direccion}
-                onChange={handleChange('direccion')}
+                value={data.direccion}
+                onChange={handleChange}
               />
             </Grid>
           </Grid>
@@ -134,7 +145,9 @@ export default function FormBusinessDetails(props) {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={props.handleSubmit}
+              disabled={disable}
+              className={disable ? classes.disable : classes.submit}
+              onClick={fordward}
             >
               Confirmar
             </Button>
