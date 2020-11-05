@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { searchSpace } from '../../services/api.service';
-import CardSpace from '../cardSpace';
+import CardSpace from '../cardSpace/cardSpace';
 import '../stylesheet/searchSpace.css';
 import MyMap from '../googleMaps';
 
@@ -9,22 +9,23 @@ const SearchSpace = ({ match }) => {
 	const [ markerSpace, setMarkerSpace ] = useState([]);
 	const query = match.params.search;
 
-	// useEffect(() => {
-	//   const getSearch = async () => {
-	//     const spaces = await searchSpace(query)
-	//     setSpace(spaces)
-	// setMarkerSpace(
-	//   space.map((space) => {
-	//     return {
-	//       lat: space.location.coordinates[0],
-	//       lng: space.location.coordinates[1]
-	//     };
-	//   })
-	// );
-	//   }
+	useEffect(() => {
+		console.log(query);
+		const getSearch = async () => {
+			const spaces = await searchSpace(query);
+			setSpace(spaces);
+			setMarkerSpace(
+				spaces.map((space) => {
+					return {
+						lat: space.location.coordinates[0],
+						lng: space.location.coordinates[1]
+					};
+				})
+			);
+		};
 
-	//   getSearch()
-	// }, []);
+		getSearch();
+	}, []);
 
 	return (
 		<div className="SearchSpace">
@@ -41,8 +42,11 @@ const SearchSpace = ({ match }) => {
 						</h3>
 					</div>
 				) : (
-					(<MyMap marker={markerSpace} />,
-           space.map((space, i) => <CardSpace key={i} space={space} />))
+					<div className="container">
+						<div className="row cards-spaces">
+							{space.map((space, i) => <CardSpace key={i} space={space} />)}
+						</div>
+					</div>
 				)}
 			</div>
 		</div>

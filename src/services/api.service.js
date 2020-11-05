@@ -15,22 +15,21 @@ http.interceptors.response.use(function(response) {
   return Promise.reject(error);
 });
 
-export const login = ({email, password}) =>  http.post('/login', {email, password} )
+export const login = ({email, password}) =>  http.post('/login', {email, password})
 export const logout = () => http.post('/logout')
 export const getToken = (token) => http.get(`/activate/${token}`)
 export const getUser = (id) => http.get(`/user/${id}`)
 export const createUser = (user) => http.post('/users', { user })
+export const updateUser = (id, user) => http.patch(`/user/${id}`, {user})
 
 export const newComment = (id, text) => http.post(`/space/${id}/comments`, { text })
 export const deleteComment = (id) => http.delete(`/space/${id}/comments`)
 
 export const newReview = (id, review) => http.post(`/space/${id}/review`, {review})
-export const paySpace = (pay) => {
-  return http.post('/create-payment-intent', pay ,{headers: {
-    "Content-Type": "application/json"
-  }})
+export const paySpace = (amount, id) => {
+  return http.post('/stripe/charge', { amount, id} )
 }
-
+export const deleteSpace = (id) => http.delete(`/space/${id}`) 
 export const spaces = () => http.get('/spaces')
 export const searchSpace = (search) => http.get(`/spaces/${search}`)
 export const getSpace = (id) => http.get(`/space/${id}`)
@@ -69,4 +68,6 @@ export const createChat = (id) => http.post(`/chat/${id}`)
 export const sendMessage = (id, message) => http.post(`/addMessage/${id}`, { message })
 export const getChatBetweenTwo = (id ) => http.get(`/chatBetweenTwo/${id}`)
 
+
+export const createBooking = (id, booking) => http.post(`/booking/${id}`, { booking })
 

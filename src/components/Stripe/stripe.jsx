@@ -2,18 +2,18 @@ import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
-import './strike.css'
+import './stripe.css'
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // loadStripe is initialized with your real test publishable API key.
-const promise = loadStripe(process.env.REACT_APP_STRIKE);
-
-export default function Strike({pay}) {
+const promise = loadStripe(process.env.REACT_APP_STRIPE);
+console.log(process.env.REACT_APP_STRIPE)
+export default function Stripe({pay, booking, id}) {
   return (
-    <div className="Strike">
+    <div className="Stripe">
       <Elements stripe={promise} >
-        <CheckoutForm pay={pay}/>
+        <CheckoutForm pay={pay} booking={booking} idSpace={id}/>
       </Elements>
     </div>
   );

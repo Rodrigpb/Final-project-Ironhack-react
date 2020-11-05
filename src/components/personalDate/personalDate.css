@@ -1,0 +1,20 @@
+.personal-date {
+    margin-top: 3em;
+}
+
+.personal-date .button {
+    text-align: right !important;
+    margin-top: 2em;
+}
+
+.file-input {
+    display: none;
+}
+
+.pointer-img {
+    cursor: pointer;
+   
+}
+.img-profile {
+    border-radius: 50%;
+}

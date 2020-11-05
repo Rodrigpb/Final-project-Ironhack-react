@@ -1,7 +1,7 @@
-import { CircularProgress, Dialog, DialogContent} from '@material-ui/core';
+import { CircularProgress, Dialog, DialogContent } from '@material-ui/core';
 import { Image } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { deleteComment, getSpace, newComment} from '../../services/api.service';
+import { deleteComment, getSpace, newComment } from '../../services/api.service';
 import MapsDetail from '../mapsDetail';
 import Ratingbar from '../ratingbar';
 import Comments from '../comments';
@@ -11,7 +11,7 @@ import Reviews from '../reviews';
 import { StarTwoTone } from '@ant-design/icons';
 import DatePicker from 'react-datepicker';
 import Button from '../Button/Button';
-import Strike from '../Strike/strike';
+import Stripe from '../Stripe/stripe';
 import Chat from '../Chat/chat';
 import { useAuthContext } from '../../contexts/AuthContext';
 
@@ -30,7 +30,8 @@ const SpaceDetail = ({ match }) => {
 	const [ total, setTotal ] = useState(null);
 	const [ totalPay, setTotalPay ] = useState(null);
 	const [ open, setOpen ] = useState(false);
-	const { user } = useAuthContext()
+	const [ bookingReserve, setBookingReserve ] = useState(null);
+	const { user } = useAuthContext();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -72,7 +73,8 @@ const SpaceDetail = ({ match }) => {
 					el === 'Sabado' && (d = 6);
 					return d;
 				});
-				setExcludeDates(exclude);
+				setExcludeDates(exclude.map(date => new Date (date)));
+				
 				setDayOpen(daysOpen);
 			}
 		},
@@ -133,6 +135,7 @@ const SpaceDetail = ({ match }) => {
 		const day = date.getDay();
 		const dateNow = new Date();
 		dateNow.setDate(dateNow.getDate() - 1);
+		
 
 		return date > dateNow && dayOpen.includes(day) && !excludeDates.includes(date);
 	};
@@ -149,19 +152,16 @@ const SpaceDetail = ({ match }) => {
 			return;
 		}
 
-		handleClickOpen();
-
 		const dates = getDaysArray(startDate, endDate);
-		const booking = {
+		setBookingReserve({
 			dayShifth: space.schedule.available,
 			dates: dates,
 			price: totalPay,
 			type: space.type[0]
-		};
+		})
+		handleClickOpen();
 	};
-
-
-
+	
 	return (
 		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
 			{space === null ? (
@@ -174,8 +174,12 @@ const SpaceDetail = ({ match }) => {
 						<div className="bg-space" style={{ background: `url(${space.image[0]})` }} />
 						<div className="bg-color" />
 					</div>
-					{/* {(user !== null && user.id !== space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""} */}
-					{(user !== null && user.id === space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""}
+					{(user !== null && user.id !== space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""}
+					{/* {user !== null && user.id === space.user.id ? (
+						<Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar} />
+					) : (
+						''
+					)} */}
 					<div className="container">
 						<div className="text-wrap">
 							<h2>{space.title}</h2>
@@ -196,11 +200,7 @@ const SpaceDetail = ({ match }) => {
 					</div>
 					<div className="container mt-5">
 						<div className="row">
-							<div className="col-md-6">
-								{space.description}
-
-							
-							</div>
+							<div className="col-md-6">{space.description}</div>
 							<div className="col-md-6">
 								<MapsDetail
 									center={{ lat: space.location.coordinates[0], lng: space.location.coordinates[1] }}
@@ -348,6 +348,7 @@ const SpaceDetail = ({ match }) => {
 										endDate={endDate}
 										monthsShown={2}
 										filterDate={isWeekday}
+										excludeDates={excludeDates}
 										selectsRange
 										inline
 									/>
@@ -388,7 +389,7 @@ const SpaceDetail = ({ match }) => {
 											aria-labelledby="form-dialog-title"
 										>
 											<DialogContent>
-												<Strike pay={totalPay} />
+												<Stripe pay={totalPay} booking={bookingReserve} id={space.id} />
 											</DialogContent>
 										</Dialog>
 										<Button name="Reservar" onClick={handleClickPay} />
@@ -421,9 +422,7 @@ const SpaceDetail = ({ match }) => {
 								</div>
 							</div>
 						</div>
-						
 					</div>
-					
 				</div>
 			)}
 		</div>

@@ -2,7 +2,7 @@
 	width: 100%;
 	height: 100vh;
 	background-size: 100% 600px !important;
-	max-height: 600px;
+	max-height: 700px;
 	background-position: center center;
 	background-repeat: no-repeat !important;
 	filter: blur(3px) grayscale(50%);
@@ -63,7 +63,7 @@
 	margin-bottom: 5px;
 }
 
-.card-price {
+.SpaceDetail .card-price {
 	background: white;
     border-radius: 20px;
 	padding: 20px;
@@ -72,11 +72,11 @@
 	box-shadow: 5px 5px 15px gray;
 }
 
-.card-price > .price {
+.SpaceDetail .card-price > .price {
 	font-weight: bold;
 }
 
-.card-price .price-service {
+.SpaceDetail .card-price .price-service {
 	border-bottom: 1px solid lightgray;
 	padding-bottom: 5px;
 	margin-bottom: 10px;
