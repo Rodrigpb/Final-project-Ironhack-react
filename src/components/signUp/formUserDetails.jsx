@@ -16,7 +16,7 @@ import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(18),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -42,8 +42,10 @@ export default function FormUserDetails(props) {
     props.nextStep();
   };
 
-  const { value, handleChange } = props;
-  //console.log(props);
+  const { handleChange, handleBlur } = props;
+  const {data, error, touch} = props.value
+
+  console.log(props);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -54,14 +56,16 @@ export default function FormUserDetails(props) {
         <Typography component="h1" variant="h5">
           Registro de nuevo usuario
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="given-name"
                 name="firstName"
-                value={value.firstName}
+                value={data.firstName}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                error={error.firstName && touch.firstName ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -78,8 +82,10 @@ export default function FormUserDetails(props) {
                 id="lastName"
                 label="Apellido"
                 name="lastName"
-                value={value.lastName}
+                value={data.lastName}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                error={error.lastName && touch.lastName ? true : false}
                 autoComplete="family-name"
               />
             </Grid>
@@ -91,8 +97,10 @@ export default function FormUserDetails(props) {
                 id="email"
                 label="Correo electrónico"
                 name="email"
-                value={value.email}
+                value={data.email}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                error={error.email && touch.email ? true : false}
                 autoComplete="email"
               />
             </Grid>
@@ -102,8 +110,10 @@ export default function FormUserDetails(props) {
                 required
                 fullWidth
                 name="password"
-                value={value.password}
+                value={data.password}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                error={error.password && touch.password ? true : false}
                 label="Contraseña"
                 type="password"
                 id="password"

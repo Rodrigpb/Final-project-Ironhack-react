@@ -94,9 +94,7 @@ export default function LogIn() {
 
    const handleSubmit = (e) => {
      e.preventDefault();
-     console.log("Hola")
-     console.log(state.data);
-
+     
       const User = async () => {
         try {
           const user = await minilogin(state.data)
@@ -194,7 +192,7 @@ export default function LogIn() {
               fullWidth
               variant="contained"
               color="primary"
-              disable={isError}
+              disabled={isError}
               className={isError ? 'button disable' : 'button'}
             >
               Iniciar sesión
