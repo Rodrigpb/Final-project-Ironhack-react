@@ -15,7 +15,7 @@ http.interceptors.response.use(function(response) {
   return Promise.reject(error);
 });
 
-export const login = ({email, password}) =>  http.post('/login', {email, password} )
+export const login = ({email, password}) =>  http.post('/login', {email, password})
 export const logout = () => http.post('/logout')
 export const getToken = (token) => http.get(`/activate/${token}`)
 export const getUser = (id) => http.get(`/user/${id}`)

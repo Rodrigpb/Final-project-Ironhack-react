@@ -174,12 +174,12 @@ const SpaceDetail = ({ match }) => {
 						<div className="bg-space" style={{ background: `url(${space.image[0]})` }} />
 						<div className="bg-color" />
 					</div>
-					{/* {(user !== null && user.id !== space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""} */}
-					{user !== null && user.id === space.user.id ? (
+					{(user !== null && user.id !== space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""}
+					{/* {user !== null && user.id === space.user.id ? (
 						<Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar} />
 					) : (
 						''
-					)}
+					)} */}
 					<div className="container">
 						<div className="text-wrap">
 							<h2>{space.title}</h2>

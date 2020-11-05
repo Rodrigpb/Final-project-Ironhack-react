@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-//import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,12 +8,11 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from '../../contexts/AuthContext';
 import {login as minilogin} from '../../services/api.service';
-import { Alert } from 'antd';
 
 
 function Copyright() {
@@ -94,13 +92,12 @@ export default function LogIn() {
 
    const handleSubmit = (e) => {
      e.preventDefault();
-     console.log("Hola")
-     console.log(state.data);
+     console.log(minilogin);
 
       const User = async () => {
         try {
           const user = await minilogin(state.data)
-          console.log(user)
+          console.log('hola', user)
           login(user)
         } catch (e) {
           setError('Email o contraseña incorrectos. Vuelva a intentarlo')

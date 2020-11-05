@@ -1,7 +1,6 @@
 import React from 'react';
 import { Comment, List } from 'antd';
 import { useAuthContext } from '../contexts/AuthContext';
-import { red } from '@material-ui/core/colors';
 
 export default function Comments({data, handleDelete}) {
 	const { user } = useAuthContext();

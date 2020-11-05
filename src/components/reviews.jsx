@@ -1,4 +1,4 @@
-import { Modal, Button, Rate, Alert } from 'antd';
+import { Modal, Button, Alert } from 'antd';
 import React from 'react';
 import { newReview } from '../services/api.service';
 import './Button/Button.css';

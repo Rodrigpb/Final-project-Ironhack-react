@@ -63,7 +63,7 @@
 	margin-bottom: 5px;
 }
 
-.card-price {
+.SpaceDetail .card-price {
 	background: white;
     border-radius: 20px;
 	padding: 20px;
@@ -72,11 +72,11 @@
 	box-shadow: 5px 5px 15px gray;
 }
 
-.card-price > .price {
+.SpaceDetail .card-price > .price {
 	font-weight: bold;
 }
 
-.card-price .price-service {
+.SpaceDetail .card-price .price-service {
 	border-bottom: 1px solid lightgray;
 	padding-bottom: 5px;
 	margin-bottom: 10px;
