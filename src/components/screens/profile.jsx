@@ -3,6 +3,9 @@ import { CircularProgress } from '@material-ui/core';
 import { Avatar, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../services/api.service';
+import Chat from '../Chat/chat';
+import PersonalDate from '../personalDate/personalDate';
+import Spaces from '../Spaces/space';
 
 import '../stylesheet/profile.css';
 
@@ -26,8 +29,7 @@ const Profile = ({ match }) => {
 
 	const handleClick = (e) => {
 		setStep(e.key);
-		console.log('click', e.key);
-	};
+  };
 
 	return (
 		<div className="profile" style={{ marginTop: '80px' }}>
@@ -66,11 +68,18 @@ const Profile = ({ match }) => {
 						<div className="col-md-8">
 							{step === 'datos' && (
 								<div className="container">
-									<Avatar
-										size={{ xs: 24, sm: 32, md: 60, lg: 80, xl: 100, xxl: 120 }}
-										src={userProfile.avatar}
-									/>
-								</div>
+									<PersonalDate userProfile={userProfile} />
+                </div>
+							)}
+              {step === 'mensajes' && (
+								<div className="container">
+									<Chat userProfile={userProfile} />
+                </div>
+							)}
+              {step === 'espacios' && (
+								<div className="container">
+									<Spaces userProfile={userProfile} />
+                </div>
 							)}
 						</div>
 					</div>

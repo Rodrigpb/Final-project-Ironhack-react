@@ -20,6 +20,7 @@ export const logout = () => http.post('/logout')
 export const getToken = (token) => http.get(`/activate/${token}`)
 export const getUser = (id) => http.get(`/user/${id}`)
 export const createUser = (user) => http.post('/users', { user })
+export const updateUser = (id, user) => http.patch(`/user/${id}`, {user})
 
 export const newComment = (id, text) => http.post(`/space/${id}/comments`, { text })
 export const deleteComment = (id) => http.delete(`/space/${id}/comments`)
@@ -30,7 +31,7 @@ export const paySpace = (pay) => {
     "Content-Type": "application/json"
   }})
 }
-
+export const deleteSpace = (id) => http.delete(`/space/${id}`) 
 export const spaces = () => http.get('/spaces')
 export const searchSpace = (search) => http.get(`/spaces/${search}`)
 export const getSpace = (id) => http.get(`/space/${id}`)
