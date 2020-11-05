@@ -3,11 +3,11 @@ import { Alert, Avatar, List, Space } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { deleteSpace } from '../../services/api.service';
 
-export default function Spaces({ userProfile }) {
+export default function Spaces({ setUserProfile, userProfile }) {
 	const { space } = userProfile;
     const [ spaces, setSpaces ] = useState('');
     const [ error, setError ] = useState(null);
-    
+    console.log(userProfile)
 
     useEffect(() => {
 		setSpaces(space)
@@ -26,7 +26,8 @@ export default function Spaces({ userProfile }) {
 			try {
                 console.log(id)
 				await deleteSpace(id);
-				setSpaces([...spaces.filter((space) => space.id !== id)]);
+				setSpaces([...spaces.filter((space) => space.id !== id)])
+				setUserProfile({...userProfile, space : [...userProfile.spaces.filter((space) => space.id !== id)]});
 			} catch (e) {
 				setError('No se ha podido borrar el espacio. Vuelve a intentarlo mas tarde.');
 			}

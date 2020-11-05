@@ -3,7 +3,7 @@ import { CircularProgress } from '@material-ui/core';
 import { Avatar, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../services/api.service';
-import Chat from '../Chat/chat';
+import Message from '../Message/message';
 import PersonalDate from '../personalDate/personalDate';
 import Spaces from '../Spaces/space';
 
@@ -73,12 +73,12 @@ const Profile = ({ match }) => {
 							)}
               {step === 'mensajes' && (
 								<div className="container">
-									<Chat userProfile={userProfile} />
+									<Message userProfile={userProfile} />
                 </div>
 							)}
               {step === 'espacios' && (
 								<div className="container">
-									<Spaces userProfile={userProfile} />
+									<Spaces setUserProfile={setUserProfile} userProfile={userProfile} />
                 </div>
 							)}
 						</div>

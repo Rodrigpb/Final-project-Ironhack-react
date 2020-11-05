@@ -26,10 +26,8 @@ export const newComment = (id, text) => http.post(`/space/${id}/comments`, { tex
 export const deleteComment = (id) => http.delete(`/space/${id}/comments`)
 
 export const newReview = (id, review) => http.post(`/space/${id}/review`, {review})
-export const paySpace = (pay) => {
-  return http.post('/create-payment-intent', pay ,{headers: {
-    "Content-Type": "application/json"
-  }})
+export const paySpace = (amount, id) => {
+  return http.post('/stripe/charge', { amount, id} )
 }
 export const deleteSpace = (id) => http.delete(`/space/${id}`) 
 export const spaces = () => http.get('/spaces')
@@ -70,4 +68,6 @@ export const createChat = (id) => http.post(`/chat/${id}`)
 export const sendMessage = (id, message) => http.post(`/addMessage/${id}`, { message })
 export const getChatBetweenTwo = (id ) => http.get(`/chatBetweenTwo/${id}`)
 
+
+export const createBooking = (id, booking) => http.post(`/booking/${id}`, { booking })
 
