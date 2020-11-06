@@ -2,6 +2,7 @@ import { HomeOutlined, MailOutlined, ProfileOutlined } from '@ant-design/icons';
 import { CircularProgress } from '@material-ui/core';
 import { Avatar, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { getUser } from '../../services/api.service';
 import Message from '../Message/message';
 import PersonalDate from '../personalDate/personalDate';
@@ -10,6 +11,7 @@ import Spaces from '../Spaces/space';
 import '../stylesheet/profile.css';
 
 const Profile = ({ match }) => {
+	const { user } = useAuthContext();
 	const [ userProfile, setUserProfile ] = useState(null);
 	const idProfile = match.params.id;
 	const { Item } = Menu;
@@ -19,6 +21,7 @@ const Profile = ({ match }) => {
 		const getUserProfile = async () => {
 			try {
 				const user = await getUser(idProfile);
+				console.log(user)
 				setUserProfile(user);
 			} catch (e) {
 				console.log(e);
@@ -29,7 +32,7 @@ const Profile = ({ match }) => {
 
 	const handleClick = (e) => {
 		setStep(e.key);
-  };
+	};
 
 	return (
 		<div className="profile" style={{ marginTop: '80px' }}>
@@ -49,13 +52,15 @@ const Profile = ({ match }) => {
 								>
 									Datos personales
 								</Item>
-								<Item
-									key="mensajes"
-									style={{ display: 'flex', alignItems: 'center' }}
-									icon={<MailOutlined />}
-								>
-									Mensajes
-								</Item>
+								{user?.id === userProfile.id && (
+									<Item
+										key="mensajes"
+										style={{ display: 'flex', alignItems: 'center' }}
+										icon={<MailOutlined />}
+									>
+										Mensajes
+									</Item>
+								)}
 								<Item
 									key="espacios"
 									style={{ display: 'flex', alignItems: 'center' }}
@@ -69,17 +74,17 @@ const Profile = ({ match }) => {
 							{step === 'datos' && (
 								<div className="container">
 									<PersonalDate userProfile={userProfile} />
-                </div>
+								</div>
 							)}
-              {step === 'mensajes' && (
+							{step === 'mensajes' && (
 								<div className="container">
 									<Message userProfile={userProfile} />
-                </div>
+								</div>
 							)}
-              {step === 'espacios' && (
+							{step === 'espacios' && (
 								<div className="container">
 									<Spaces setUserProfile={setUserProfile} userProfile={userProfile} />
-                </div>
+								</div>
 							)}
 						</div>
 					</div>

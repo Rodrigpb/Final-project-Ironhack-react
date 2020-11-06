@@ -1,13 +1,15 @@
 import { DeleteTwoTone, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Alert, Avatar, List, Space } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { deleteSpace } from '../../services/api.service';
 
 export default function Spaces({ setUserProfile, userProfile }) {
 	const { space } = userProfile;
     const [ spaces, setSpaces ] = useState('');
-    const [ error, setError ] = useState(null);
-    console.log(userProfile)
+	const [ error, setError ] = useState(null);
+	const { user } = useAuthContext();
+
 
     useEffect(() => {
 		setSpaces(space)
@@ -15,6 +17,7 @@ export default function Spaces({ setUserProfile, userProfile }) {
 
 
 	const IconText = ({ icon, text, onClick, style }) => (
+		
 		<Space onClick={onClick} style={style}>
 			{React.createElement(icon)}
 			{text}
@@ -64,12 +67,14 @@ export default function Spaces({ setUserProfile, userProfile }) {
 						actions={[
 							<IconText icon={StarOutlined} text={item.comments.length} key="list-vertical-star-o" />,
 							<IconText icon={MessageOutlined} text={item.reviews.length} key="list-vertical-message" />,
+							
 							<IconText
-								style={{ cursor: 'pointer' }}
+								style={user.id === userProfile.id ? { cursor: 'pointer' } : { display: 'none' } }
 								onClick={() => onClick(item.id)}
 								icon={DeleteTwoTone}
 								key="list-vertical-like-o"
 							/>
+						
 						]}
 						extra={<img width={272} alt={item.name} src={item.image[0]} />}
 					>

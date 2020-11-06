@@ -1,10 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-const containerStyle = {
-	width: '400px',
-	height: '400px'
-};
+
 
 function MapsDetail(props) {
     const [map, setMap] = useState(null)
@@ -24,7 +21,7 @@ function MapsDetail(props) {
 	return (
 		<LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API}>
 			<GoogleMap
-				mapContainerStyle={containerStyle}
+				mapContainerStyle={props.containerStyle}
 				center={props.center}
 				zoom={15}
 				//onLoad={onLoad}
