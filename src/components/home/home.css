@@ -1,3 +1,12 @@
 .ant-list-lg .ant-list-item {
     padding: 0 !important;
 }
+
+.video-foreground,
+.video-background iframe {
+  /* position: absolute; */
+  background-size: cover;
+  width: 100%;
+  height: calc(100vh - 80px);
+  pointer-events: none;
+}

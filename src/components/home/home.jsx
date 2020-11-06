@@ -15,8 +15,7 @@ import './home.css';
 import ExportTypography from 'antd/lib/typography/Typography';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
 
-import Footer from './footer'
-
+import Footer from './footer';
 
 function Copyright() {
 	return (
@@ -96,7 +95,7 @@ export default function Home() {
 			<main>
 				{/* Hero unit */}
 				<div className={classes.heroContent}>
-					<div className="container" >
+					<div className="container">
 						<Typography component="h6" variant="h4" align="center" color="textPrimary" gutterBottom>
 							Cómo puede ayudar YouWork a tu empresa a avanzar
 						</Typography>
@@ -161,9 +160,9 @@ export default function Home() {
 								size="large"
 								pagination={{
 									onChange: (page) => {
-										const a = document.createElement('a')
-										a.href='#start-spaces'
-										a.click()
+										const a = document.createElement('a');
+										a.href = '#start-spaces';
+										a.click();
 									},
 									pageSize: 15
 								}}
@@ -182,13 +181,11 @@ export default function Home() {
 						</div>
 					)}
 				</div>
-				
 			</main>
 
-			<Container>
-				<BackgroundVideo />
-			</Container>
-			<Footer/>
+			<BackgroundVideo />
+
+			<Footer />
 		</React.Fragment>
 	);
 }
