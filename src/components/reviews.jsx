@@ -43,7 +43,7 @@ class Reviews extends React.Component {
 			try {
                 await newReview(this.props.spaceId, review);
 				this.setState({visibleok : true}) 
-				this.props.setChange(!this.props.change)           
+				this.props.setChange()           
 			} catch (e) {
 				console.log(e)
 			}
@@ -96,8 +96,8 @@ class Reviews extends React.Component {
 				>
 					Introducir Evaluación
 				</Button>
-                {this.state.visibleok && <Alert style={{margin:'5px 0'}} message="Gracias por tu evaluación" type="success" showIcon closable /> }
-                {this.state.error !== null && <Alert style={{margin:'5px 0'}} message={this.state.error} type="error" showIcon closable />}
+                {this.state.visibleok && <Alert style={{margin:'0 10px', display:'inline'}} message="Gracias por tu evaluación" type="success" showIcon closable /> }
+                {this.state.error !== null && <Alert style={{margin:'0 10px', display:'inline'}} message={this.state.error} type="error" showIcon closable />}
 				<Modal
 					title="Evalúa el paso por este espacio"
 					visible={visible}

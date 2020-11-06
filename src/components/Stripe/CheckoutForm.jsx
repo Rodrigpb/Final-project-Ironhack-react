@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { createBooking, paySpace } from '../../services/api.service';
-export default function CheckoutForm({ pay, booking, idSpace }) {
+export default function CheckoutForm({ pay, booking, idSpace, change, closeDialog }) {
 	const [ succeeded, setSucceeded ] = useState(false);
 	const [ error, setError ] = useState(null);
 	const [ processing, setProcessing ] = useState('');
 	const [ disabled, setDisabled ] = useState(true);
-	const [ clientSecret, setClientSecret ] = useState('');
 	const stripe = useStripe();
 	const elements = useElements();
 
@@ -62,6 +61,10 @@ export default function CheckoutForm({ pay, booking, idSpace }) {
 					setError(null);
 					setProcessing(false);
 					setSucceeded(true);
+					change();
+					setTimeout(() => {
+						closeDialog();
+					}, 2000);
 				}
 			} catch (error) {
 				console.log('CheckoutForm.js 28 | ', error.message);
@@ -94,8 +97,6 @@ export default function CheckoutForm({ pay, booking, idSpace }) {
 			{/* Show a success message upon completion */}
 			<p className={succeeded ? 'result-message' : 'result-message hidden'}>
 				Pago completado. Su reserva esta efectuada.
-				<a href={`https://dashboard.stripe.com/test/payments`}> Stripe dashboard.</a> Refresh the page to pay
-				again.
 			</p>
 		</form>
 	);

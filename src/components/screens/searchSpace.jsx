@@ -14,11 +14,13 @@ const SearchSpace = ({ match }) => {
 		type: [],
 		service: []
 	});
+	const [spaceResult, setSpaceResult] = useState(undefined)
 	const query = match.params.search;
 	const containerStyle = {
 		width: '100%',
 		height: '100vh'
 	};
+
 	const servicesArray = [
 		'Gestion de agencias',
 		'Oficina Virtual',
@@ -57,6 +59,7 @@ const SearchSpace = ({ match }) => {
 		const getSearch = async () => {
 			const spaces = await searchSpace(query);
 			setSpace(spaces);
+			setSpaceResult(spaces)
 			setMarkerSpace(
 				spaces.map((space) => {
 					return {
@@ -68,11 +71,27 @@ const SearchSpace = ({ match }) => {
 		};
 
 		getSearch();
-	}, []);
+	}, [query]);
+
+	useEffect(() => {
+		setSpaceResult(space?.filter(space => {
+			return filterSearch.service.every(el => space.services.includes(el)) && filterSearch.type.every(el => el.includes(space.type[0]))
+		}))
+		if (spaceResult !== undefined) {
+		setMarkerSpace(
+			spaceResult.map((space) => {
+				return {
+					lat: space.location.coordinates[0],
+					lng: space.location.coordinates[1]
+				};
+			})
+		);
+		}
+		
+	}, [filterSearch])
 
 	const handleChange = (e) => {
 		const { name, value} = e.target;
-		console.log(name, value);
 
 		setFilterSearch({
 			...filterSearch,
@@ -82,15 +101,6 @@ const SearchSpace = ({ match }) => {
 		});
 	};
 	
-	const h = space?.filter(space => {
-		return filterSearch.type.includes(space.type[0]) 
-	})
-
-	//console.log(f)
-
-	//const hola = space.services.filter(s => filterSearch.service.includes(s))
-
-
 	
 	return (
 		<div className="SearchSpace">
@@ -173,16 +183,16 @@ const SearchSpace = ({ match }) => {
 				</Accordion>
 			</div>
 			<div className="container-space">
-				{space === null ? (
+				{spaceResult === undefined ? (
 					<div className="container">
 						<div class="alert alert-warning mt-5 text-center" role="alert">
 							Cargando...
 						</div>
 					</div>
-				) : space.length === 0 ? (
+				) : spaceResult.length === 0 ? (
 					<div className="container">
 						<h3 class="font-italic mt-5 text-center" role="alert">
-							Upps.. No hay resultados de tu busqueda. Intente en otra ciudad
+							Upps.. No hay resultados de tu busqueda
 						</h3>
 					</div>
 				) : (
@@ -198,7 +208,7 @@ const SearchSpace = ({ match }) => {
 							<div className="col-md-7">
 								<div className="container">
 									<div className="row cards-spaces">
-										{space.map((space, i) => <CardSpace key={i} space={space} />)}
+										{spaceResult.map((space, i) => <CardSpace key={i} space={space} n={5}/>)}
 									</div>
 								</div>
 							</div>

@@ -14,6 +14,7 @@ import Button from '../Button/Button';
 import Stripe from '../Stripe/stripe';
 import Chat from '../Chat/chat';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 const SpaceDetail = ({ match }) => {
 	const [ space, setSpace ] = useState(null);
@@ -57,6 +58,7 @@ const SpaceDetail = ({ match }) => {
 				}
 			};
 			showSpace();
+			console.log('hola')
 		},
 		[ change ]
 	);
@@ -88,7 +90,8 @@ const SpaceDetail = ({ match }) => {
 	useEffect(
 		() => {
 			if (startDate !== null && endDate !== null) {
-				setTotal(space.price * (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+				const t = Math.floor(endDate.getUTCDate() - startDate.getUTCDate()) || 1
+				setTotal(space.price * t)
 				setTotalPay(total + services);
 			}
 		},
@@ -98,6 +101,10 @@ const SpaceDetail = ({ match }) => {
 	const onChange = (e) => {
 		setComment(e.target.value);
 	};
+
+	const onChangeValueChange = () => {
+		setChange(!change)
+	}
 
 	const onChangeDates = (dates) => {
 		const [ start, end ] = dates;
@@ -165,6 +172,7 @@ const SpaceDetail = ({ match }) => {
 		})
 		handleClickOpen();
 	};
+
 	
 	return (
 		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
@@ -199,12 +207,16 @@ const SpaceDetail = ({ match }) => {
 					</div>
 					<div className="wrap">
 						{space.image.map((image, i) => {
-							return <Image width={200} src={image} alt={`${space.title}${i}`} height={200} />;
+							return <Image key={i} width={200} src={image} alt={`${space.title}${i}`} height={200} />;
 						})}
 					</div>
 					<div className="container mt-5">
 						<div className="row">
-							<div className="col-md-6">{space.description}</div>
+							<div className="col-md-6">{space.description}
+							
+							
+							<span className='see-profile-user'>Espacio creado por: <Link style={{color:'#132651'}} to={`/profile/${space.user.id}`}>{space.user.name}</Link></span>
+							</div>
 							<div className="col-md-6">
 								<MapsDetail containerStyle={containerStyle}
 									center={{ lat: space.location.coordinates[0], lng: space.location.coordinates[1] }}
@@ -262,7 +274,7 @@ const SpaceDetail = ({ match }) => {
 							)}{' '}
 							( {space.reviews.length > 1 ? `${space.reviews.length}` : 0} Evaluaciones)
 							<span className="ml-5">
-								<Reviews spaceId={space.id} setchange={setChange} change={change} />
+								<Reviews spaceId={space.id} setchange={onChangeValueChange} change={change} />
 							</span>
 						</div>
 
@@ -329,15 +341,14 @@ const SpaceDetail = ({ match }) => {
 								) : endDate === null ? (
 									'Selecciona la fecha de salida'
 								) : (
-									`${(endDate.getTime() - startDate.getTime()) /
-										(1000 * 60 * 60 * 24)} días en ${space.title}`
+									`${(Math.floor(endDate.getUTCDate() - startDate.getUTCDate())) || 1} días en ${space.title}`
 								)}
 								<small className="ml-3 mt-1 font-weight-light text-muted d-block">
 									{startDate !== null &&
 										endDate !== null &&
-										`${startDate.getDay() + 1} de ${startDate.toLocaleString('default', {
+										`${startDate.getUTCDate() + 1} de ${startDate.toLocaleString('default', {
 											month: 'short'
-										})} de ${startDate.getFullYear()} - ${endDate.getDay() +
+										})} de ${startDate.getFullYear()} - ${endDate.getUTCDate() +
 											1} de ${endDate.toLocaleString('default', {
 											month: 'short'
 										})} de ${endDate.getFullYear()}`}
@@ -363,7 +374,7 @@ const SpaceDetail = ({ match }) => {
 												<span>Entrada</span>
 												<small className="font-weight-light text-muted">
 													{startDate !== null ? (
-														`${startDate.getDay() +
+														`${startDate.getUTCDate() +
 															1} de ${startDate.toLocaleString('default', {
 															month: 'short'
 														})} de ${startDate.getFullYear()}`
@@ -376,7 +387,7 @@ const SpaceDetail = ({ match }) => {
 												<span>Salida</span>
 												<small className="font-weight-light text-muted d-block">
 													{endDate !== null ? (
-														`${endDate.getDay() +
+														`${endDate.getUTCDate() +
 															1} de ${endDate.toLocaleString('default', {
 															month: 'short'
 														})} de ${endDate.getFullYear()}`
@@ -393,7 +404,7 @@ const SpaceDetail = ({ match }) => {
 											aria-labelledby="form-dialog-title"
 										>
 											<DialogContent>
-												<Stripe pay={totalPay} booking={bookingReserve} id={space.id} />
+												<Stripe closeDialog={handleClose} change={onChangeValueChange} pay={totalPay} booking={bookingReserve} id={space.id} />
 											</DialogContent>
 										</Dialog>
 										<Button name="Reservar" onClick={handleClickPay} />
@@ -402,8 +413,7 @@ const SpaceDetail = ({ match }) => {
 												<div>
 													{startDate !== null &&
 														endDate !== null &&
-														`${space.price} x ${(endDate.getTime() - startDate.getTime()) /
-															(1000 * 60 * 60 * 24)} días`}
+														`${space.price} x ${(Math.floor(endDate.getUTCDate() - startDate.getUTCDate()) || 1)} días`}
 												</div>
 												<span>{startDate !== null && endDate !== null && `${total} €`} </span>
 											</div>
