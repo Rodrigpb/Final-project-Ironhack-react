@@ -1,88 +1,100 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
-import Button from '@material-ui/core/Button';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
+import '../stylesheet/spaceDetail.css';
+import Button from '../Button/Button';
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const carouselPhotos = [
-  {
-    imgPath:
-      'https://www.emprendedores.es/wp-content/uploads/2020/04/coworking-1587455610-1024x683.jpg',
-  },
-  {
-    imgPath:
-    'https://cdn.ticbeat.com/src/uploads/2018/12/popularidad-coworking.jpg'
-  },
-  {
-    imgPath:
-    'https://media-exp1.licdn.com/dms/image/C511BAQEXHKNYTCqHWw/company-background_10000/0?e=2159024400&v=beta&t=MVZmuiJlxT7qmKCPPXOmbRWM-ST-SGt6sLzF-YauzsQ'
-  },
-  {
-    imgPath:
-      'https://rt00.epimg.net/retina/imagenes/2018/07/30/tendencias/1532946509_997689_1532948816_noticia_normal.jpg',
-  },
-  {
-    imgPath:
-      'https://www.adslzone.net/app/uploads/2019/04/borrar-fondo-imagen.jpg',
-  },
+	{
+		imgPath: '/images/carousel-1.jpg'
+	},
+	{
+		imgPath: '/images/carousel-2.jpg'
+	},
+	{
+		imgPath: '/images/carousel-3.jpg'
+	}
 ];
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100vw',
-    height: '100vh'
-  },
-  img: {
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    width: '100vw',
-    height: '100vh'
-  },
+	root: {
+		width: '100vw',
+		height: '100vh'
+	},
+	img: {
+		backgroundRepeat: 'no-repeat',
+		backgroundSize: 'cover',
+		backgroundPosition: 'center',
+		width: '100vw',
+		height: '100vh'
+	},
+	buttonStep: {
+		alignItems: 'center',
+		// marginTop : '-2em',
+		zIndex: '1000',
+		display: 'flex',
+		justifyContent: 'center'
+	}
 }));
 
 function Carousel() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
+	const classes = useStyles();
+	const theme = useTheme();
+	const [ activeStep, setActiveStep ] = React.useState(0);
   const maxSteps = carouselPhotos.length;
+  const history = useHistory();
+  const { user } = useAuthContext();
 
-
-
-  const handleStepChange = (step) => {
-    setActiveStep(step);
+	const handleStepChange = (step) => {
+		setActiveStep(step);
   };
+  const handleClick = () => {
+    if (user){
+      return history.push(`/profile/${user.id}`)
+    }
+    history.push('/register')
+  }
 
-  return (
-    <div className={classes.root}> 
-      <AutoPlaySwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={activeStep}
-        onChangeIndex={handleStepChange}
-        enableMouseEvents
-      >
-        {carouselPhotos.map((step, index) => (
-          <div key={step.label} >
-            {Math.abs(activeStep - index) <= 2 ? (
-              <img className={classes.img} src={step.imgPath} alt={step.label} />
-            ) : null}
-          </div>
-        ))}
-      </AutoPlaySwipeableViews>
-      <MobileStepper
-        steps={maxSteps}
-        position="static"
-        variant="dots"
-        activeStep={activeStep}
-      />
-      
-    </div>
-  );
+	return (
+		<div className={`${classes.root} SpaceDetail`}>
+			<div className="bg-wrapper">
+				<AutoPlaySwipeableViews
+					axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+					index={activeStep}
+					onChangeIndex={handleStepChange}
+					enableMouseEvents
+				>
+					{carouselPhotos.map((step, index) => (
+						<div key={step.label}>
+							{Math.abs(activeStep - index) <= 2 ? (
+								<img className={classes.img} src={step.imgPath} alt={step.label} />
+							) : null}
+						</div>
+					))}
+				</AutoPlaySwipeableViews>
+				<div className="bg-color" />
+			</div>
+			<MobileStepper
+				className={classes.buttonStep}
+				steps={maxSteps}
+				position="static"
+				variant="dots"
+				activeStep={activeStep}
+			/>
+			<div className="container">
+				<div className="text-wrap">
+					<h2 style={{ lineHeight: '1.5em' }}>Adáptate con el lugar de trabajo del mañana</h2>
+          <Button name={user ? 'Ver perfil' : 'Registrate'} onClick={handleClick} />
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default Carousel;

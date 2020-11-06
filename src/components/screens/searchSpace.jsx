@@ -185,13 +185,13 @@ const SearchSpace = ({ match }) => {
 			<div className="container-space">
 				{spaceResult === undefined ? (
 					<div className="container">
-						<div class="alert alert-warning mt-5 text-center" role="alert">
+						<div className="alert alert-warning mt-5 text-center" role="alert">
 							Cargando...
 						</div>
 					</div>
 				) : spaceResult.length === 0 ? (
 					<div className="container">
-						<h3 class="font-italic mt-5 text-center" role="alert">
+						<h3 className="font-italic mt-5 text-center" role="alert">
 							Upps.. No hay resultados de tu busqueda
 						</h3>
 					</div>
