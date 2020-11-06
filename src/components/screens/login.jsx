@@ -96,7 +96,6 @@ export default function LogIn() {
       const User = async () => {
         try {
           const user = await minilogin(state.data)
-          console.log('hola', user)
           login(user)
         } catch (e) {
           setError('Email o contraseña incorrectos. Vuelva a intentarlo')

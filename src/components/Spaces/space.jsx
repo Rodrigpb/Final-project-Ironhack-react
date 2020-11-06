@@ -1,6 +1,6 @@
 import { DeleteTwoTone, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Alert, Avatar, List, Space } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { deleteSpace } from '../../services/api.service';
 
