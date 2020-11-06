@@ -10,17 +10,17 @@
 }
 
 .SpaceDetail .bg-wrapper {
-    position: relative;
-    height: 100%;
+	position: relative;
+	height: 100%;
 }
 .SpaceDetail .bg-wrapper > .bg-color {
-    position: absolute;
-    height: 100%;
-    background-color: #000;
-    opacity: .5;
-    z-index: 1;
-    width: 100%;
-    top: 0;
+	position: absolute;
+	height: 100%;
+	background-color: #000;
+	opacity: .5;
+	z-index: 1;
+	width: 100%;
+	top: 0;
 }
 
 .SpaceDetail .text-wrap {
@@ -32,8 +32,8 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-    height: 50%;
-    font-family: Arial, Helvetica, sans-serif;
+	height: 50%;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 .SpaceDetail .text-wrap > h2 {
@@ -41,21 +41,19 @@
 	text-transform: uppercase;
 	font-weight: 600;
 	color: white;
-	
 }
 
 .service {
-    font-weight: 500;
-    margin: 1em 0;
+	font-weight: 500;
+	margin: 1em 0;
 }
 
-
 .gray {
-    background-color: #eee;
+	background-color: #eee;
 }
 .SpaceDetail .text-wrap > .price {
 	font-weight: 700;
-    font-style: italic;
+	font-style: italic;
 }
 .SpaceDetail .text-wrap > .price > .type {
 	border-top: 2px solid white;
@@ -65,7 +63,7 @@
 
 .SpaceDetail .card-price {
 	background: white;
-    border-radius: 20px;
+	border-radius: 20px;
 	padding: 20px;
 	margin-left: 30px;
 	width: 17em;
@@ -85,9 +83,14 @@
 .button-chat {
 	position: absolute;
 	bottom: 0;
-
 }
 
 .button-chat .button {
 	margin-bottom: 5px !important;
+}
+
+.see-profile-user {
+	position: absolute;
+	bottom: 0;
+	left: 20px;
 }

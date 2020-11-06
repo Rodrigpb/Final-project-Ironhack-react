@@ -6,7 +6,7 @@ import './Header.css';
 import { SearchOutlined } from '@ant-design/icons';
 import Avatar from 'antd/lib/avatar/avatar';
 import { Button, Menu, MenuItem } from '@material-ui/core';
-import { logout as LogOutUser } from '../../services/api.service.js'
+import { logout as LogOutUser } from '../../services/api.service.js';
 
 const Header = (props) => {
 	const { user, logout } = useAuthContext();
@@ -19,7 +19,6 @@ const Header = (props) => {
 	};
 
 	const handleClose = () => {
-		console.log('hol')
 		setAnchorEl(null);
 	};
 
@@ -35,18 +34,18 @@ const Header = (props) => {
 
 	const handleClickLogOut = () => {
 		const log = async () => {
-			
-				await LogOutUser()
-				logout()
-		
+			await LogOutUser();
+			logout();
 		};
-		log()
+		log();
 	};
 
 	return (
 		<header className="Header">
 			<div className="container header-container">
-				<img src="/images/logo.png" alt="logo" className="logo" />
+				<Link to="/">
+					<img src="/images/logo.png" alt="logo" className="logo" />
+				</Link>
 				<form className="search" onSubmit={onSubmit}>
 					<input name="search" placeholder="¿Donde quieres trabajar?" value={search} onChange={onChange} />
 					<button type="submit" style={{ border: '0', backgroundColor: 'white' }}>
@@ -79,11 +78,9 @@ const Header = (props) => {
 							</Menu>
 						</div>
 					) : (
-
 						<Link className="color-logo" to="/login">
 							ENTRAR
 						</Link>
-			
 					)}
 				</div>
 			</div>

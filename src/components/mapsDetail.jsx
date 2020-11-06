@@ -28,10 +28,10 @@ function MapsDetail(props) {
 				onUnmount={onUnmount}
 			>
 				{props.marker ? (
-					props.marker.map((marker) => {
+					props.marker.map((marker, id) => {
 						return (
 							<Marker
-								key={marker.id}
+								key={id}
 								// onClick={onClick}
 								position={marker}
 							/>

@@ -18,7 +18,7 @@
     align-items: center;
 }
 
-.header-container > .logo {
+.header-container .logo {
     width: 10em;
 }
 .header-container > .search {

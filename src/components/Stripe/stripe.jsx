@@ -8,12 +8,12 @@ import './stripe.css'
 // recreating the Stripe object on every render.
 // loadStripe is initialized with your real test publishable API key.
 const promise = loadStripe(process.env.REACT_APP_STRIPE);
-console.log(process.env.REACT_APP_STRIPE)
-export default function Stripe({pay, booking, id}) {
+
+export default function Stripe({pay, booking, id, change, closeDialog}) {
   return (
     <div className="Stripe">
       <Elements stripe={promise} >
-        <CheckoutForm pay={pay} booking={booking} idSpace={id}/>
+        <CheckoutForm closeDialog={closeDialog} change={change} pay={pay} booking={booking} idSpace={id}/>
       </Elements>
     </div>
   );

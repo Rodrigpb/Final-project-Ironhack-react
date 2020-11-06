@@ -30,7 +30,7 @@ export const paySpace = (amount, id) => {
   return http.post('/stripe/charge', { amount, id} )
 }
 export const deleteSpace = (id) => http.delete(`/space/${id}`) 
-export const spaces = () => http.get('/spaces')
+export const spacesAll = () => http.get('/spaces')
 export const searchSpace = (search) => http.get(`/spaces/${search}`)
 export const getSpace = (id) => http.get(`/space/${id}`)
 export const newSpace = (data) => {
