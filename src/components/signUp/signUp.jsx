@@ -2,7 +2,6 @@ import React from 'react';
 import FormUserDetails from './formUserDetails'
 import FormBusinessDetails from './formBusinessDetails'
 import Congratulations from './congratulations';
-import { useAuthContext } from '../../contexts/AuthContext';
 import {createUser} from '../../services/api.service';
 
 const validations = {

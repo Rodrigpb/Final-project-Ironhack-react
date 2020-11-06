@@ -1,6 +1,5 @@
-import { UploadOutlined } from '@ant-design/icons';
 import { TextField } from '@material-ui/core';
-import { List, Typography, Upload } from 'antd';
+import { List, Typography} from 'antd';
 import React, { useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { updateUser } from '../../services/api.service';
@@ -49,7 +48,7 @@ const PersonalDate = ({ userProfile }) => {
 	const handleSubmit = () => {
 		const update = async () => {
 			try {
-				const userUpdate = await updateUser(userProfile.id, state);
+				await updateUser(userProfile.id, state);
 				setVisible(false)
 			} catch (e) {
 				console.log(e);

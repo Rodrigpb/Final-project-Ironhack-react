@@ -1,34 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import Carousel from './carousel';
 import BackgroundVideo from './backgroundVideo';
 import { spacesAll } from '../../services/api.service';
 import CardSpace from '../cardSpace/cardSpace';
-
-import { Card, Col, List, Row } from 'antd';
+import { Card, List} from 'antd';
 import './home.css';
-import ExportTypography from 'antd/lib/typography/Typography';
-import ColumnGroup from 'antd/lib/table/ColumnGroup';
-
 import Footer from './footer';
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="/">
-				You Work
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	);
-}
 
 const useStyles = makeStyles((theme) => ({
 	icon: {
@@ -67,12 +48,12 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const cards = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
+
 
 export default function Home() {
 	const classes = useStyles();
 	const [ spaces, setSpaces ] = useState(null);
-	const [ element, setElement ] = useState(14);
+	
 
 	useEffect(() => {
 		const getSpace = async () => {
@@ -83,10 +64,7 @@ export default function Home() {
 		getSpace();
 	}, []);
 
-	const handleClickMore = () => {
-		setElement(element + 15);
-		window.dispatchEvent(new Event('resize'));
-	};
+
 
 	return (
 		<React.Fragment>

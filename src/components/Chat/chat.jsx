@@ -67,14 +67,6 @@ const Chat = ({ nameUser, avatar, userSpace }) => {
 			};
 
 			newMessage();
-			// setMessageList([
-			// 	...messageList,
-			// 	{
-			// 		author: 'me',
-			// 		type: 'text',
-			// 		data: { text: message.data.text }
-			// 	}
-			// ]);
 			setChange(!change);
 		}
 	};
