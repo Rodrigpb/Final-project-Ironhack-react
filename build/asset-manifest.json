@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.27f2a044.chunk.css",
+    "main.js": "/static/js/main.e69fe1db.chunk.js",
+    "main.js.map": "/static/js/main.e69fe1db.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.3db236d4.js",
+    "runtime-main.js.map": "/static/js/runtime-main.3db236d4.js.map",
+    "static/css/2.0f3d5ea4.chunk.css": "/static/css/2.0f3d5ea4.chunk.css",
+    "static/js/2.999f2ff2.chunk.js": "/static/js/2.999f2ff2.chunk.js",
+    "static/js/2.999f2ff2.chunk.js.map": "/static/js/2.999f2ff2.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.0f3d5ea4.chunk.css.map": "/static/css/2.0f3d5ea4.chunk.css.map",
+    "static/css/main.27f2a044.chunk.css.map": "/static/css/main.27f2a044.chunk.css.map",
+    "static/js/2.999f2ff2.chunk.js.LICENSE.txt": "/static/js/2.999f2ff2.chunk.js.LICENSE.txt",
+    "static/media/chat-icon.f032be1d.svg": "/static/media/chat-icon.f032be1d.svg",
+    "static/media/logo-no-bg.4d881dc9.svg": "/static/media/logo-no-bg.4d881dc9.svg",
+    "static/media/notification.aa8f8c40.mp3": "/static/media/notification.aa8f8c40.mp3"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3db236d4.js",
+    "static/css/2.0f3d5ea4.chunk.css",
+    "static/js/2.999f2ff2.chunk.js",
+    "static/css/main.27f2a044.chunk.css",
+    "static/js/main.e69fe1db.chunk.js"
+  ]
+}
