@@ -6,10 +6,8 @@ import Carousel from './carousel';
 import BackgroundVideo from './backgroundVideo';
 import { spacesAll } from '../../services/api.service';
 import CardSpace from '../cardSpace/cardSpace';
-import { Card, List} from 'antd';
+import { Card, List } from 'antd';
 import './home.css';
-import Footer from './footer';
-
 
 const useStyles = makeStyles((theme) => ({
 	icon: {
@@ -48,12 +46,9 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-
-
 export default function Home() {
 	const classes = useStyles();
 	const [ spaces, setSpaces ] = useState(null);
-	
 
 	useEffect(() => {
 		const getSpace = async () => {
@@ -64,11 +59,8 @@ export default function Home() {
 		getSpace();
 	}, []);
 
-
-
 	return (
 		<React.Fragment>
-			<CssBaseline />
 			<Carousel />
 			<main>
 				{/* Hero unit */}
@@ -128,7 +120,13 @@ export default function Home() {
 				{/* End hero unit */}
 
 				<div className="container" name="start-spaces" id="start-spaces">
-					{spaces !== null && (
+					{spaces === null ? (
+						<div className="container">
+							<div className="alert alert-warning mt-5 text-center" role="alert">
+								Cargando...
+							</div>
+						</div>
+					) : (
 						<div className="row cards-spaces mb-5">
 							<h3 className="mt-5 mb-5"> Encuentra tu espacio perfecto</h3>
 
@@ -162,8 +160,6 @@ export default function Home() {
 			</main>
 
 			<BackgroundVideo />
-
-			<Footer />
 		</React.Fragment>
 	);
 }

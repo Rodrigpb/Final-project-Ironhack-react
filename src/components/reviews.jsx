@@ -37,13 +37,13 @@ class Reviews extends React.Component {
         delete review.confirmLoading
         delete review.error
         
-
+		console.log(this.props)
         
         const sendReview = async () => { 
 			try {
                 await newReview(this.props.spaceId, review);
 				this.setState({visibleok : true}) 
-				this.props.setChange()           
+				this.props.setChange()          
 			} catch (e) {
 				console.log(e)
 			}

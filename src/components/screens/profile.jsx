@@ -1,6 +1,6 @@
 import { HomeOutlined, MailOutlined, ProfileOutlined } from '@ant-design/icons';
 import { CircularProgress } from '@material-ui/core';
-import { Avatar, Menu } from 'antd';
+import { Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getUser } from '../../services/api.service';
@@ -21,7 +21,6 @@ const Profile = ({ match }) => {
 		const getUserProfile = async () => {
 			try {
 				const user = await getUser(idProfile);
-				console.log(user)
 				setUserProfile(user);
 			} catch (e) {
 				console.log(e);
@@ -35,7 +34,7 @@ const Profile = ({ match }) => {
 	};
 
 	return (
-		<div className="profile" style={{ marginTop: '80px' }}>
+		<div className="profile" style={{ marginTop: '80px', marginBottom:'200px' }}>
 			{userProfile === null ? (
 				<div className="text-center" style={{ marginTop: '120px' }}>
 					<CircularProgress />

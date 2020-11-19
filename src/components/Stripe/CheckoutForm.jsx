@@ -49,15 +49,15 @@ export default function CheckoutForm({ pay, booking, idSpace, change, closeDialo
 		const { error, paymentMethod } = payload;
 
 		if (!error) {
-			console.log('Stripe 23 | token generated!', paymentMethod);
+			
 			try {
 				const { id } = paymentMethod;
 
 				const response = await paySpace(pay, id);
-				console.log('Stripe 35 | data', response.success);
+				
 				if (response.success) {
-					console.log('CheckoutForm.js 25 | payment successful!');
-					const reserve = await createBooking(idSpace, booking);
+
+					await createBooking(idSpace, booking);
 					setError(null);
 					setProcessing(false);
 					setSucceeded(true);
@@ -67,12 +67,11 @@ export default function CheckoutForm({ pay, booking, idSpace, change, closeDialo
 					}, 2000);
 				}
 			} catch (error) {
-				console.log('CheckoutForm.js 28 | ', error.message);
+			
 				setError(`Payment failed ${error.message}`);
 				setProcessing(false);
 			}
 		} else {
-			console.log(error.message);
 			setError(`Payment failed ${error.message}`);
 			setProcessing(false);
 		}
@@ -86,7 +85,7 @@ export default function CheckoutForm({ pay, booking, idSpace, change, closeDialo
 				id="submit"
 				style={{ backgroundColor: '#132651', color: 'white' }}
 			>
-				<span id="button-text">{processing ? <div className="spinner" id="spinner" /> : 'Pay'}</span>
+				<span id="button-text">{processing ? <div className="spinner" id="spinner" /> : `Pagar ${pay} €`}</span>
 			</button>
 			{/* Show any error that happens when processing the payment */}
 			{error && (

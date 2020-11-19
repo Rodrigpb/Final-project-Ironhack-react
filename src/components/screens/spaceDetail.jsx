@@ -52,13 +52,11 @@ const SpaceDetail = ({ match }) => {
 				try {
 					const space = await getSpace(spaceId);
 					setSpace(space);
-					console.log(space);
 				} catch (e) {
 					setError(e);
 				}
 			};
 			showSpace();
-			console.log('hola')
 		},
 		[ change ]
 	);
@@ -79,8 +77,8 @@ const SpaceDetail = ({ match }) => {
 					el === 'Sabado' && (d = 6);
 					return d;
 				});
-				setExcludeDates(exclude.map(date => new Date (date)));
-				
+				setExcludeDates(exclude.map((date) => new Date(date)));
+
 				setDayOpen(daysOpen);
 			}
 		},
@@ -90,8 +88,8 @@ const SpaceDetail = ({ match }) => {
 	useEffect(
 		() => {
 			if (startDate !== null && endDate !== null) {
-				const t = Math.floor(endDate.getUTCDate() - startDate.getUTCDate()) || 1
-				setTotal(space.price * t)
+				const t = Math.floor(endDate.getUTCDate() - startDate.getUTCDate()) || 1;
+				setTotal(space.price * t);
 				setTotalPay(total + services);
 			}
 		},
@@ -103,8 +101,8 @@ const SpaceDetail = ({ match }) => {
 	};
 
 	const onChangeValueChange = () => {
-		setChange(!change)
-	}
+		setChange(!change);
+	};
 
 	const onChangeDates = (dates) => {
 		const [ start, end ] = dates;
@@ -146,7 +144,6 @@ const SpaceDetail = ({ match }) => {
 		const day = date.getDay();
 		const dateNow = new Date();
 		dateNow.setDate(dateNow.getDate() - 1);
-		
 
 		return date > dateNow && dayOpen.includes(day) && !excludeDates.includes(date);
 	};
@@ -169,15 +166,14 @@ const SpaceDetail = ({ match }) => {
 			dates: dates,
 			price: totalPay,
 			type: space.type[0]
-		})
+		});
 		handleClickOpen();
 	};
 
-	
 	return (
 		<div className="SpaceDetail" style={{ marginTop: '80px' }}>
 			{space === null ? (
-				<div className="text-center" style={{marginTop: '30px'}}>
+				<div className="text-center" style={{ marginTop: '30px' }}>
 					<CircularProgress />
 				</div>
 			) : (
@@ -186,12 +182,12 @@ const SpaceDetail = ({ match }) => {
 						<div className="bg-space" style={{ background: `url(${space.image[0]})` }} />
 						<div className="bg-color" />
 					</div>
-					{(user !== null && user.id !== space.user.id) ? <Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar}/> : ""}
-					{/* {user !== null && user.id === space.user.id ? (
+					{user !== null && user.id !== space.user.id ? (
 						<Chat userSpace={space.user} nameUser={space.user.name} avatar={space.user.avatar} />
 					) : (
 						''
-					)} */}
+					)}
+
 					<div className="container">
 						<div className="text-wrap">
 							<h2>{space.title}</h2>
@@ -212,13 +208,19 @@ const SpaceDetail = ({ match }) => {
 					</div>
 					<div className="container mt-5">
 						<div className="row">
-							<div className="col-md-6">{space.description}
-							
-							
-							<span className='see-profile-user'>Espacio creado por: <Link style={{color:'#132651'}} to={`/profile/${space.user.id}`}>{space.user.name}</Link></span>
+							<div className="col-md-6">
+								{space.description}
+
+								<span className="see-profile-user">
+									Espacio creado por:{' '}
+									<Link style={{ color: '#132651' }} to={`/profile/${space.user.id}`}>
+										{space.user.name}
+									</Link>
+								</span>
 							</div>
 							<div className="col-md-6">
-								<MapsDetail containerStyle={containerStyle}
+								<MapsDetail
+									containerStyle={containerStyle}
 									center={{ lat: space.location.coordinates[0], lng: space.location.coordinates[1] }}
 								/>
 								<div className="contact-detail mt-3">
@@ -274,7 +276,7 @@ const SpaceDetail = ({ match }) => {
 							)}{' '}
 							( {space.reviews.length > 1 ? `${space.reviews.length}` : 0} Evaluaciones)
 							<span className="ml-5">
-								<Reviews spaceId={space.id} setchange={onChangeValueChange} change={change} />
+								<Reviews spaceId={space.id} setChange={onChangeValueChange} change={change} />
 							</span>
 						</div>
 
@@ -341,7 +343,8 @@ const SpaceDetail = ({ match }) => {
 								) : endDate === null ? (
 									'Selecciona la fecha de salida'
 								) : (
-									`${(Math.floor(endDate.getUTCDate() - startDate.getUTCDate())) || 1} días en ${space.title}`
+									`${Math.floor(endDate.getUTCDate() - startDate.getUTCDate()) ||
+										1} días en ${space.title}`
 								)}
 								<small className="ml-3 mt-1 font-weight-light text-muted d-block">
 									{startDate !== null &&
@@ -404,7 +407,13 @@ const SpaceDetail = ({ match }) => {
 											aria-labelledby="form-dialog-title"
 										>
 											<DialogContent>
-												<Stripe closeDialog={handleClose} change={onChangeValueChange} pay={totalPay} booking={bookingReserve} id={space.id} />
+												<Stripe
+													closeDialog={handleClose}
+													change={onChangeValueChange}
+													pay={totalPay}
+													booking={bookingReserve}
+													id={space.id}
+												/>
 											</DialogContent>
 										</Dialog>
 										<Button name="Reservar" onClick={handleClickPay} />
@@ -413,7 +422,9 @@ const SpaceDetail = ({ match }) => {
 												<div>
 													{startDate !== null &&
 														endDate !== null &&
-														`${space.price} x ${(Math.floor(endDate.getUTCDate() - startDate.getUTCDate()) || 1)} días`}
+														`${space.price} x ${Math.floor(
+															endDate.getUTCDate() - startDate.getUTCDate()
+														) || 1} días`}
 												</div>
 												<span>{startDate !== null && endDate !== null && `${total} €`} </span>
 											</div>

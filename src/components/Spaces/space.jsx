@@ -27,7 +27,6 @@ export default function Spaces({ setUserProfile, userProfile }) {
 	const onClick = (id) => {
 		const deleteSp = async () => {
 			try {
-                console.log(id)
 				await deleteSpace(id);
 				setSpaces([...spaces.filter((space) => space.id !== id)])
 				setUserProfile({...userProfile, space : [...userProfile.spaces.filter((space) => space.id !== id)]});

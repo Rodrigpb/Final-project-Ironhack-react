@@ -71,7 +71,7 @@ function Carousel() {
 					enableMouseEvents
 				>
 					{carouselPhotos.map((step, index) => (
-						<div key={step.label}>
+						<div key={index}>
 							{Math.abs(activeStep - index) <= 2 ? (
 								<img className={classes.img} src={step.imgPath} alt={step.label} />
 							) : null}
@@ -89,7 +89,7 @@ function Carousel() {
 			/>
 			<div className="container">
 				<div className="text-wrap">
-					<h2 style={{ lineHeight: '1.5em' }}>Adáptate con el lugar de trabajo del mañana</h2>
+					<h2 style={{ lineHeight: '1.5em', width:'80%' }}>Adáptate con el lugar de trabajo del mañana</h2>
           <Button name={user ? 'Ver perfil' : 'Registrate'} onClick={handleClick} />
 				</div>
 			</div>

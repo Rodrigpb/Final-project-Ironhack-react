@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -13,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from '../../contexts/AuthContext';
 import {login as minilogin} from '../../services/api.service';
+import Button from '../Button/Button';
 
 
 function Copyright() {
@@ -71,8 +71,7 @@ const validations = {
 }
 
 
-//Función de Login----------------------------------------
-export default function LogIn() {
+export default function LogIn(props) {
   const classes = useStyles();
   const {login} = useAuthContext()
   const [serror, setError] = useState(null)
@@ -134,10 +133,9 @@ export default function LogIn() {
 
    const { data, error, touch } = state;
    const isError = Object.values(error).some((el) => el);
-
   return (
     <Grid container component="main" className={classes.root}>
-      <CssBaseline />
+      
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
@@ -148,6 +146,13 @@ export default function LogIn() {
           <Typography component="h1" variant="h5">
             Inicia sesión
           </Typography>
+          {props.location.state?.message.message !== undefined && (
+							<div className="container">
+								<div className="alert alert-info mt-2 text-center" role="alert">
+									{props.location.state.message.message}
+								</div>
+							</div>
+						)}
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
@@ -181,28 +186,26 @@ export default function LogIn() {
             />
             {serror !== null ? serror : ""}
             <FormControlLabel
-              control={<Checkbox value="remember" color="#132651" />}
+              control={<Checkbox value="remember"/>}
               label="No me olvides"
             />
             <Button
+              name='Iniciar sesión'
               type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
+              style={{width: '100%'}}
               disabled={isError}
               className={isError ? 'button disable' : 'button'}
-            >
-              Iniciar sesión
-            </Button>
+            />
+              
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" style={{color:"#132651"}}>
                   ¿Has olvidado la contraseña?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/register" variant="body2">
-                  {"¿No tienes cuenta? Registrate"}
+                <Link href="/register" variant="body2" style={{color:"#132651"}}>
+                  ¿No tienes cuenta? Registrate
                 </Link>
               </Grid>
             </Grid>
