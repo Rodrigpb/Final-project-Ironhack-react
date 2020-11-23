@@ -266,7 +266,7 @@ const SpaceDetail = ({ match }) => {
 								{' '}
 								<StarTwoTone twoToneColor="#D1A617" />
 							</span>
-							{space.reviews.length > 1 ? (
+							{space.reviews.length > 0 ? (
 								`${(space.reviews.reduce((acum, val) => acum + val.rating.generalExperience, 0) *
 									2 *
 									10 /
@@ -274,7 +274,7 @@ const SpaceDetail = ({ match }) => {
 							) : (
 								0
 							)}{' '}
-							( {space.reviews.length > 1 ? `${space.reviews.length}` : 0} Evaluaciones)
+							( {space.reviews.length > 0 ? `${space.reviews.length}` : 0} Evaluaciones)
 							<span className="ml-5">
 								<Reviews spaceId={space.id} setChange={onChangeValueChange} change={change} />
 							</span>
