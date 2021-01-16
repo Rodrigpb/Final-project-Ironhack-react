@@ -37,8 +37,10 @@ const Header = (props) => {
 	};
 
 	return (
+	
 		
-			<Navbar expand="lg" className='Header'>
+			<Navbar expand="lg" className='Header container-fluid'>
+				<div className='container'>
 				<Navbar.Brand href="/">
 					<img src="/images/logo.png" alt="logo" className="logo" />
 				</Navbar.Brand>
@@ -80,7 +82,9 @@ const Header = (props) => {
 						)}
 					</Nav>
 				</Navbar.Collapse>
+				</div>
 			</Navbar>
+			
 	
 	);
 };
