@@ -2,11 +2,11 @@ import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, 
 import { MehOutlined, SmileTwoTone } from '@ant-design/icons';
 import React, { useCallback, useState } from 'react';
 import '../stylesheet/newSpace.css';
-import InputNumberWithLabel from '../inputNumberwithLabel';
 import MyMap from '../Maps/googleMaps';
 import Button from '../Button/Button';
 import { newSpace } from '../../services/api.service';
 import { useHistory } from 'react-router-dom';
+import { Form } from 'react-bootstrap';
 
 const validations = {
 	title: (value) => value.length > 1,
@@ -183,7 +183,7 @@ const NewSpace = (props) => {
 			<form onSubmit={handleSubmit}>
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Información General</h5>
-					<div className="row mt-5 ml-5">
+					<div className="row mt-5 ml-0 ml-md-5">
 						<div className="col-md-6 d-flex flex-column justify-content-between ">
 							<TextField
 								id="standard-basic"
@@ -198,7 +198,9 @@ const NewSpace = (props) => {
 							/>
 							<div className="mb-3">
 								<h6>Sube las imágenes de tu espacio</h6>
-								<input type="file" onChange={handleChange} name="files" multiple />
+
+								<input type="file" className="input-" onChange={handleChange} name="files" multiple />
+						
 							</div>
 						</div>
 						<div className="col-md-5 d-flex flex-column">
@@ -221,7 +223,7 @@ const NewSpace = (props) => {
 				</div>
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Servicios</h5>
-					<div className="row mt-5 ml-5">
+					<div className="row mt-5 ml-0 ml-md-5">
 						{services.map((service, index) => {
 							return (
 								<div className="col-md-6" key={index}>
@@ -244,7 +246,7 @@ const NewSpace = (props) => {
 				</div>
 				<div className="container container-article">
 					<h5 className="ml-4 mt-3 font-weight-bold">Dirección</h5>
-					<div className="row mt-5 ml-5">
+					<div className="row mt-5 ml-0 ml-md-5">
 						<MyMap
 							center={data.coordinates}
 							onPlaceSelected={handlePlace}

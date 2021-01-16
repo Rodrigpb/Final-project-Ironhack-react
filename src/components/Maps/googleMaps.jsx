@@ -2,7 +2,6 @@ import React from 'react';
 import { Autocomplete, GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const containerStyle = {
-	width: '400px',
 	height: '400px'
 };
 
@@ -10,7 +9,7 @@ function MyMap(props) {
 	return (
 		
 			<LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API} libraries={[ 'places' ]}>
-				<div className="col-md-6">
+				<div className="col-md-6 mb-2">
 					<Autocomplete
 						onPlaceChanged={props.onPlaceSelected}
 						types={[ 'address' ]}
@@ -25,7 +24,8 @@ function MyMap(props) {
 								height: '40px',
 								paddingLeft: '16px',
 								marginTop: '2px',
-								marginBottom: '15px'
+								marginBottom: '15px',
+								border: '0'
 							}}
 						/>
 					</Autocomplete>
@@ -36,7 +36,8 @@ function MyMap(props) {
 							width: '100%',
 							height: '40px',
 							paddingLeft: '16px',
-							marginTop: '2px'
+							marginTop: '2px',
+							border: '0'
 						}}
 						type="text"
 						name="extraDirection"
