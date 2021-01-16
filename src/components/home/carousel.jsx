@@ -1,14 +1,14 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
-import SwipeableViews from 'react-swipeable-views';
+import ReactSwipableView from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import '../stylesheet/spaceDetail.css';
 import Button from '../Button/Button';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+const AutoPlaySwipeableViews = autoPlay(ReactSwipableView);
 
 const carouselPhotos = [
 	{
@@ -47,19 +47,19 @@ function Carousel() {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [ activeStep, setActiveStep ] = React.useState(0);
-  const maxSteps = carouselPhotos.length;
-  const history = useHistory();
-  const { user } = useAuthContext();
+	const maxSteps = carouselPhotos.length;
+	const history = useHistory();
+	const { user } = useAuthContext();
 
 	const handleStepChange = (step) => {
 		setActiveStep(step);
-  };
-  const handleClick = () => {
-    if (user){
-      return history.push(`/profile/${user.id}`)
-    }
-    history.push('/register')
-  }
+	};
+	const handleClick = () => {
+		if (user) {
+			return history.push(`/profile/${user.id}`);
+		}
+		history.push('/register');
+	};
 
 	return (
 		<div className={`${classes.root} SpaceDetail`}>
@@ -88,9 +88,9 @@ function Carousel() {
 				activeStep={activeStep}
 			/>
 			<div className="container">
-				<div className="text-wrap">
-					<h2 style={{ lineHeight: '1.5em', width:'80%' }}>Adáptate con el lugar de trabajo del mañana</h2>
-          <Button name={user ? 'Ver perfil' : 'Registrate'} onClick={handleClick} />
+				<div className="text-wrap align-items-center">
+					<h2 style={{ lineHeight: '1.5em', width: '80%' }}>Adáptate con el lugar de trabajo del mañana</h2>
+					<Button name={user ? 'Ver perfil' : 'Registrate'} onClick={handleClick} />
 				</div>
 			</div>
 		</div>

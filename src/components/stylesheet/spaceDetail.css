@@ -37,7 +37,7 @@
 }
 
 .SpaceDetail .text-wrap > h2 {
-	font-size: 4em;
+	font-size: 50px;
 	text-transform: uppercase;
 	font-weight: 600;
 	color: white;
@@ -46,6 +46,14 @@
 .service {
 	font-weight: 500;
 	margin: 1em 0;
+}
+
+#footer {
+	position: absolute;
+	bottom: 15px;
+	right: 0;
+	left: 0;
+	margin: auto;
 }
 
 .gray {

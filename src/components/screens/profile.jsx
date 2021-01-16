@@ -21,6 +21,7 @@ const Profile = ({ match }) => {
 		const getUserProfile = async () => {
 			try {
 				const user = await getUser(idProfile);
+				console.log(user)
 				setUserProfile(user);
 			} catch (e) {
 				console.log(e);

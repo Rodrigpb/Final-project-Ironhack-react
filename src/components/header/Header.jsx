@@ -7,22 +7,18 @@ import { SearchOutlined } from '@ant-design/icons';
 import Avatar from 'antd/lib/avatar/avatar';
 import { Button, Menu, MenuItem } from '@material-ui/core';
 import { logout as LogOutUser } from '../../services/api.service.js';
+import { Form, FormControl, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 const Header = (props) => {
 	const { user, logout } = useAuthContext();
 	const history = useHistory();
 	const [ search, setSearch ] = useState('');
-	const [ anchorEl, setAnchorEl ] = useState(null);
+	
 
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
 
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
 
 	const onChange = (e) => {
+		
 		setSearch(e.target.value);
 	};
 
@@ -41,51 +37,54 @@ const Header = (props) => {
 	};
 
 	return (
-		<header className="Header">
-			<div className="container header-container">
-				<Link to="/">
+		
+			<Navbar expand="lg" className='Header'>
+				<Navbar.Brand href="/">
 					<img src="/images/logo.png" alt="logo" className="logo" />
-				</Link>
-				<form className="search" onSubmit={onSubmit}>
-					<input name="search" placeholder="¿Donde quieres trabajar?" value={search} onChange={onChange} />
-					<button type="submit" style={{ border: '0', backgroundColor: 'white' }}>
-						<SearchOutlined className="search-logo" />
-					</button>
-				</form>
-				<div className="nav">
-					<Link to="/new-space" className="mr-4 color-logo">
-						AÑADE TU ESPACIO
-					</Link>
-					{user ? (
-						<div>
-							<Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-								<Avatar src={user.avatar} />
-								<span className="ml-1">{user.name}</span>
-							</Button>
-							<Menu
-								id="simple-menu"
-								anchorEl={anchorEl}
-								keepMounted
-								open={Boolean(anchorEl)}
-								onClose={handleClose}
-							>
-								<MenuItem>
-									<Link className="color-logo" to={`/profile/${user.id}`}>
-										Ver perfil
-									</Link>
-								</MenuItem>
-								<MenuItem onClick={handleClickLogOut}>Cerrar sesión</MenuItem>
-							</Menu>
-						</div>
-					) : (
-						<Link className="color-logo" to="/login">
-							ENTRAR
-						</Link>
-					)}
-				</div>
-			</div>
-		</header>
+				</Navbar.Brand>
+				<Navbar.Toggle aria-controls="basic-navbar-nav" />
+				<Navbar.Collapse id="basic-navbar-nav" className="header-container justify-content-center">
+					<Form inline onSubmit={onSubmit} className="search d-flex ">
+						<FormControl
+							name="search"
+							type="text"
+							placeholder="¿Donde quieres trabajar?"
+							value={search}
+							onChange={onChange}
+						/>
+						<Button
+							type="submit"
+							style={{ border: '0', backgroundColor: 'white' }}
+							
+						>
+							<SearchOutlined className="search-logo" />
+						</Button>
+					</Form>
+					<Nav >
+						<Nav.Link href="/new-space" className="mr-4 color-logo">
+							Añade tu espacio
+						</Nav.Link>
+						{user ? (
+							<NavDropdown title={user.name} id="basic-nav-dropdown">
+								<NavDropdown.Item href={`/profile/${user.id}`} className="color-logo">
+									Ver perfil
+								</NavDropdown.Item>
+								<NavDropdown.Item href="#" onClick={handleClickLogOut}>
+									Cerrar sesión
+								</NavDropdown.Item>
+							</NavDropdown>
+						) : (
+							<Nav.Link href="/login" className="color-logo">
+								Entrar
+							</Nav.Link>
+						)}
+					</Nav>
+				</Navbar.Collapse>
+			</Navbar>
+	
 	);
 };
 
 export default Header;
+
+

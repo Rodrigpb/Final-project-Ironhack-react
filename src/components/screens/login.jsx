@@ -137,7 +137,7 @@ export default function LogIn(props) {
     <Grid container component="main" className={classes.root}>
       
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid style={{position:'relative'}} item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Link href="/" >
             <img src="/images/logo.png" alt="logo" className={classes.avatar}/>
@@ -185,10 +185,7 @@ export default function LogIn(props) {
               error={error.password && touch.password ? true : false}
             />
             {serror !== null ? serror : ""}
-            <FormControlLabel
-              control={<Checkbox value="remember"/>}
-              label="No me olvides"
-            />
+ 
             <Button
               name='Iniciar sesión'
               type="submit"
@@ -197,7 +194,7 @@ export default function LogIn(props) {
               className={isError ? 'button disable' : 'button'}
             />
               
-            <Grid container>
+            <Grid container className='flex-md-row flex-column'>
               <Grid item xs>
                 <Link href="#" variant="body2" style={{color:"#132651"}}>
                   ¿Has olvidado la contraseña?
@@ -209,9 +206,9 @@ export default function LogIn(props) {
                 </Link>
               </Grid>
             </Grid>
-            <Box mt={5}>
+            <div id='footer'>
               <Copyright />
-            </Box>
+            </div>
           </form>
         </div>
       </Grid>
