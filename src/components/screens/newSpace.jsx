@@ -6,7 +6,6 @@ import MyMap from '../Maps/googleMaps';
 import Button from '../Button/Button';
 import { newSpace } from '../../services/api.service';
 import { useHistory } from 'react-router-dom';
-import { Form } from 'react-bootstrap';
 
 const validations = {
 	title: (value) => value.length > 1,
